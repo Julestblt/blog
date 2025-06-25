@@ -1,0 +1,22 @@
+input: ./docs
+output: ./public
+
+url: https://blog.julez.cat/
+
+branding:
+  title: JuleZ
+  label: Blog
+  # logo: /static/logo.svg
+  # favicon: /static/logo.svg
+
+links:
+  - text: About
+    link: about.md
+  - text: GitHub
+    link: https://github.com/Julestblt
+
+footer:
+  copyright: "&copy; {{ year }} JuleZ. All rights reserved."
+
+start:
+  page: index.md

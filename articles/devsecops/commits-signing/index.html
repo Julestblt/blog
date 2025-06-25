@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="turbo-cache-control" content="no-cache" data-turbo-track="reload" data-track-token="3.10.1.804168952158">
+    <meta name="turbo-cache-control" content="no-cache" data-turbo-track="reload" data-track-token="3.10.1.804169125519">
 
     <!-- See retype.com -->
     <meta name="generator" content="Retype 3.10.1">
@@ -14,30 +14,30 @@
     <meta name="description" content="Git allows anyone to set any name and email on a commit. This makes it trivial for an attacker to impersonate another contributor">
 
     <!-- Canonical -->
-    <link rel="canonical" href="https://blog.julez.cat/articles/commits-signing/">
+    <link rel="canonical" href="https://blog.julez.cat/articles/devsecops/commits-signing/">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://blog.julez.cat/articles/commits-signing/">
+    <meta property="og:url" content="https://blog.julez.cat/articles/devsecops/commits-signing/">
     <meta property="og:title" content="Commits signing">
     <meta property="og:description" content="Git allows anyone to set any name and email on a commit. This makes it trivial for an attacker to impersonate another contributor">
     <meta property="og:image" content="https://blog.julez.cat/static/commits-signing/impersonated-commit.png">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://blog.julez.cat/articles/commits-signing/">
+    <meta property="twitter:url" content="https://blog.julez.cat/articles/devsecops/commits-signing/">
     <meta property="twitter:title" content="Commits signing">
     <meta property="twitter:description" content="Git allows anyone to set any name and email on a commit. This makes it trivial for an attacker to impersonate another contributor">
     <meta property="twitter:image" content="https://blog.julez.cat/static/commits-signing/impersonated-commit.png">
 
     <script data-cfasync="false">(function(){var cl=document.documentElement.classList,ls=localStorage.getItem("retype_scheme"),hd=cl.contains("dark"),hl=cl.contains("light"),wm=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;if(ls==="dark"||(!ls&&wm&&!hd&&!hl)){cl.remove("light");cl.add("dark")}else if(ls==="light"||(!ls&&!wm&&!hd&&!hl)){cl.remove("dark");cl.add("light")}})();</script>
 
-    <link href="../../resources/css/retype.css?v=3.10.1.804168952158" rel="stylesheet">
+    <link href="../../../resources/css/retype.css?v=3.10.1.804169125519" rel="stylesheet">
 
-    <script data-cfasync="false" src="../../resources/js/config.js?v=3.10.1.804168952158" data-turbo-eval="false" defer></script>
-    <script data-cfasync="false" src="../../resources/js/retype.js?v=3.10.1" data-turbo-eval="false" defer></script>
-    <script id="lunr-js" data-cfasync="false" src="../../resources/js/lunr.js?v=3.10.1.804168952158" data-turbo-eval="false" defer></script>
-    <script id="prism-js" data-cfasync="false" src="../../resources/js/prism.js?v=3.10.1.804168952158" defer></script>
+    <script data-cfasync="false" src="../../../resources/js/config.js?v=3.10.1.804169125519" data-turbo-eval="false" defer></script>
+    <script data-cfasync="false" src="../../../resources/js/retype.js?v=3.10.1" data-turbo-eval="false" defer></script>
+    <script id="lunr-js" data-cfasync="false" src="../../../resources/js/lunr.js?v=3.10.1.804169125519" data-turbo-eval="false" defer></script>
+    <script id="prism-js" data-cfasync="false" src="../../../resources/js/prism.js?v=3.10.1.804169125519" defer></script>
 </head>
 <body>
     <div id="retype-app" class="relative text-base antialiased text-gray-700 bg-white font-body dark:bg-dark-850 dark:text-dark-300">
@@ -52,7 +52,7 @@
                 <!-- Logo -->
                 <div class="flex items-center justify-between h-full py-2 md:w-75">
                     <div class="flex items-center px-2 md:px-6">
-                        <a id="retype-branding-logo" href="../../" class="flex items-center leading-snug text-2xl">
+                        <a id="retype-branding-logo" href="../../../" class="flex items-center leading-snug text-2xl">
                             <span class="dark:text-white font-bold line-clamp-1 md:line-clamp-2">JuleZ</span>
                         </a><span id="retype-branding-label" class="hidden mt-1 px-2 py-1 ml-4 text-xs font-semibold leading-none text-root-logo-label-text bg-root-logo-label-bg rounded-md md:inline-block">Blog</span>
                     </div>
@@ -194,7 +194,7 @@ git commit -m &quot;Improve performance&quot;</code></pre>
 </doc-codeblock></div>
 <p>And here’s how it looks in the commit history:</p>
 <p><figure class="content-center">
-    <img src="../../static/commits-signing/impersonated-commit.png" alt="Impersonation example" />
+    <img src="../../../static/commits-signing/impersonated-commit.png" alt="Impersonation example" />
     <figcaption class="caption">Impersonation example</figcaption>
 </figure>
 </p>
@@ -203,7 +203,7 @@ git commit -m &quot;Improve performance&quot;</code></pre>
 </blockquote>
 <p>As my github account is linked to my SSH key, it will recognize me as the committer, but in the repository, it will only show the author as Linus Torvalds, which can be misleading.</p>
 <p><figure class="content-center">
-    <img src="../../static/commits-signing/git-log-history.png" alt="Git log history" />
+    <img src="../../../static/commits-signing/git-log-history.png" alt="Git log history" />
     <figcaption class="caption">Git log history</figcaption>
 </figure>
 </p>
@@ -292,7 +292,7 @@ git commit -m &quot;Fix security issue&quot;</code></pre>
 <strong>Settings &gt; SSH and GPG keys &gt; New GPG key</strong></p>
 <p>At the end, you should have the GPG key added to your GitHub account :</p>
 <p><figure class="content-center">
-    <img src="../../static/commits-signing/gpg-github.png" alt="GPG key added to GitHub" />
+    <img src="../../../static/commits-signing/gpg-github.png" alt="GPG key added to GitHub" />
     <figcaption class="caption">GPG key added to GitHub</figcaption>
 </figure>
 </p>
@@ -320,7 +320,7 @@ git config commit.gpgsign true</code></pre>
 <p>If configured correctly, GitHub will show a <code v-pre>Verified</code> badge <span class="docs-emoji">&#x2705;</span></p>
 </blockquote>
 <p><figure class="content-center">
-    <img src="../../static/commits-signing/verified-commit.webp" alt="Verified commit" />
+    <img src="../../../static/commits-signing/verified-commit.webp" alt="Verified commit" />
     <figcaption class="caption">Verified commit</figcaption>
 </figure>
 </p>
@@ -355,16 +355,23 @@ git config commit.gpgsign true</code></pre>
                             
                                 <nav id="retype-nextprev" class="print:hidden flex mt-14">
                                     <div class="w-1/2">
-                                        <a class="px-5 py-4 h-full flex items-center break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r rounded-l-lg transition-colors duration-150 relative hover:z-5" href="../../articles/dorking/google-dorking/">
+                                        <a class="px-5 py-4 h-full flex items-center break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-l-lg transition-colors duration-150 relative hover:z-5" href="../../../">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="mr-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19 11H7.41l5.29-5.29a.996.996 0 10-1.41-1.41l-7 7a1 1 0 000 1.42l7 7a1.024 1.024 0 001.42-.01.996.996 0 000-1.41L7.41 13H19c.55 0 1-.45 1-1s-.45-1-1-1z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
                                             <span>
                                                 <span class="block text-xs font-normal text-gray-400 dark:text-dark-400">Previous</span>
-                                                <span class="block mt-1">Google Dorking Guide</span>
+                                                <span class="block mt-1">Welcome</span>
                                             </span>
                                         </a>
                                     </div>
                             
                                     <div class="w-1/2">
+                                        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="../../../articles/dorking/google-dorking/">
+                                            <span>
+                                                <span class="block text-xs font-normal text-right text-gray-400 dark:text-dark-400">Next</span>
+                                                <span class="block mt-1">Google Dorking Guide</span>
+                                            </span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="ml-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19.92 12.38a1 1 0 00-.22-1.09l-7-7a.996.996 0 10-1.41 1.41l5.3 5.3H5c-.55 0-1 .45-1 1s.45 1 1 1h11.59l-5.29 5.29a.996.996 0 000 1.41c.19.2.44.3.7.3s.51-.1.71-.29l7-7c.09-.09.16-.21.21-.33z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
+                                        </a>
                                     </div>
                                 </nav>
                             </footer>
@@ -405,6 +412,6 @@ git config commit.gpgsign true</code></pre>
 
     <div id="retype-overlay-target"></div>
 
-    <script data-cfasync="false">window.__DOCS__ = { "title": "Commits signing", level: 2, icon: "file", hasPrism: true, hasMermaid: false, hasMath: false, tocDepth: 23 }</script>
+    <script data-cfasync="false">window.__DOCS__ = { "title": "Commits signing", level: 3, icon: "file", hasPrism: true, hasMermaid: false, hasMath: false, tocDepth: 23 }</script>
 </body>
 </html>

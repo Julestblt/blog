@@ -10,10 +10,10 @@ branding:
   # favicon: /static/logo.svg
 
 links:
-  - text: About
-    link: about.md
   - text: GitHub
     link: https://github.com/Julestblt
+  - text: Portfolio
+    link: https://julez.cat/
 
 footer:
   copyright: "&copy; {{ year }} JuleZ. All rights reserved."

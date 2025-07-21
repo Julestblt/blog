@@ -9,24 +9,26 @@
     <meta name="generator" content="Retype 3.11.0">
 
     <!-- Primary Meta Tags -->
-    <title>Google Dorking Guide</title>
-    <meta name="title" content="Google Dorking Guide">
-    <meta name="description" content="Google Dorking is legal as long as you're only passively viewing public search results.">
+    <title>What is DevSecOps ?</title>
+    <meta name="title" content="What is DevSecOps ?">
+    <meta name="description" content="TL;DR– DevSecOps integrates security from the first line of code through production operations, using collaboration and automation to make security...">
 
     <!-- Canonical -->
-    <link rel="canonical" href="https://blog.julez.cat/articles/dorking/google-dorking/">
+    <link rel="canonical" href="https://blog.julez.cat/articles/devsecops/devsecops-definition/">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://blog.julez.cat/articles/dorking/google-dorking/">
-    <meta property="og:title" content="Google Dorking Guide">
-    <meta property="og:description" content="Google Dorking is legal as long as you're only passively viewing public search results.">
+    <meta property="og:url" content="https://blog.julez.cat/articles/devsecops/devsecops-definition/">
+    <meta property="og:title" content="What is DevSecOps ?">
+    <meta property="og:description" content="TL;DR– DevSecOps integrates security from the first line of code through production operations, using collaboration and automation to make security...">
+    <meta property="og:image" content="https://blog.julez.cat/static/devsecops-definition/devsecops-activities.png">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://blog.julez.cat/articles/dorking/google-dorking/">
-    <meta property="twitter:title" content="Google Dorking Guide">
-    <meta property="twitter:description" content="Google Dorking is legal as long as you're only passively viewing public search results.">
+    <meta property="twitter:url" content="https://blog.julez.cat/articles/devsecops/devsecops-definition/">
+    <meta property="twitter:title" content="What is DevSecOps ?">
+    <meta property="twitter:description" content="TL;DR– DevSecOps integrates security from the first line of code through production operations, using collaboration and automation to make security...">
+    <meta property="twitter:image" content="https://blog.julez.cat/static/devsecops-definition/devsecops-activities.png">
 
     <script data-cfasync="false">(function(){var cl=document.documentElement.classList,ls=localStorage.getItem("retype_scheme"),hd=cl.contains("dark"),hl=cl.contains("light"),wm=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;if(ls==="dark"||(!ls&&wm&&!hd&&!hl)){cl.remove("light");cl.add("dark")}else if(ls==="light"||(!ls&&!wm&&!hd&&!hl)){cl.remove("dark");cl.add("light")}})();</script>
 
@@ -169,200 +171,192 @@
                                 <!-- Rendered if sidebar right is enabled -->
                                 <div id="retype-sidebar-right-toggle"></div>
                                 <!-- Page content  -->
-<doc-anchor-target id="google-dorking-guide" class="break-words">
+<doc-anchor-target id="what-is-devsecops-" class="break-words">
     <h1>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#google-dorking-guide">#</doc-anchor-trigger>
-        <span>Google Dorking Guide</span>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#what-is-devsecops-">#</doc-anchor-trigger>
+        <span>What is DevSecOps ?</span>
     </h1>
 </doc-anchor-target>
-<doc-anchor-target id="-legal-notice">
+<blockquote>
+<p><strong>TL;DR</strong> – DevSecOps integrates security <em>from the first line of code</em> through production operations, using collaboration and automation to make security everyone’s job and deliver software both <strong>fast</strong> <em>and</em> <strong>safe</strong>.</p>
+</blockquote>
+<hr>
+<doc-anchor-target id="1-why-devsecops-matters">
     <h2>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#-legal-notice">#</doc-anchor-trigger>
-        <span><span class="docs-emoji">&#x26A0;&#xFE0F;</span> Legal Notice</span>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#1-why-devsecops-matters">#</doc-anchor-trigger>
+        <span>1. Why DevSecOps Matters</span>
+    </h2>
+</doc-anchor-target>
+<p>Traditional software delivery placed security checks at the end of the pipeline, often days or weeks before release. This <strong>“bolt‑on”</strong> approach can cause:</p>
+<ul>
+<li>Late‑stage vulnerabilities that are expensive to fix</li>
+<li>Friction between developers, ops, and security teams</li>
+<li>Release delays and dissatisfied customers</li>
+</ul>
+<p>DevSecOps emerged to <strong>shift security left</strong> – embedding security practices, tooling, and mindset throughout the Continuous Integration/Continuous Delivery (CI/CD) lifecycle.</p>
+<hr>
+<doc-anchor-target id="2-working-definition">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#2-working-definition">#</doc-anchor-trigger>
+        <span>2. Working Definition</span>
     </h2>
 </doc-anchor-target>
 <blockquote>
-<p><strong>Google Dorking is legal as long as you&#x27;re only passively viewing public search results.</strong></p>
+<p><strong>DevSecOps</strong> is the practice of integrating <strong>development (Dev)</strong>, <strong>security (Sec)</strong>, and <strong>operations (Ops)</strong> into a single, continuous workflow where <em>every</em> team member shares ownership of security through automated controls, rapid feedback, and collaborative culture.</p>
 </blockquote>
-<p>However:</p>
-<ul>
-<li>Accessing, exploiting, or modifying resources <strong>without permission is illegal</strong></li>
-<li>Always use it within a <strong>bug bounty</strong>, <strong>authorized pentest</strong>, or <strong>your own infrastructure</strong></li>
-</ul>
-<hr>
-<p><strong>Google Dorking</strong>, also known as <em>Google Hacking</em>, is the practice of using advanced search operators on Google to extract specific or sensitive information from public web resources.</p>
-<p>This technique can reveal:</p>
-<ul>
-<li>Exposed confidential files</li>
-<li>Public admin interfaces</li>
-<li>Leaked credentials</li>
-<li>Misconfigured servers</li>
-</ul>
-<doc-anchor-target id="why-is-google-dorking-powerful">
-    <h2>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#why-is-google-dorking-powerful">#</doc-anchor-trigger>
-        <span>Why is Google Dorking powerful?</span>
-    </h2>
-</doc-anchor-target>
-<p>Because <strong>Google indexes everything</strong> it can access: PDFs, logs, databases, admin panels, backups… If it&#x27;s public, it can be found.</p>
-<p>For example:</p>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre translate="no" class="language-none"><code v-pre class="language-none">intitle:&quot;index of&quot; &quot;backup.zip&quot;</code></pre>
-</doc-codeblock></div>
-<p>This will look for directory listings containing a file named <code v-pre>backup.zip</code>.</p>
-<doc-anchor-target id="key-google-operators">
-    <h2>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#key-google-operators">#</doc-anchor-trigger>
-        <span>Key Google Operators</span>
-    </h2>
-</doc-anchor-target>
+<p>Key attributes:</p>
 <div class="table-wrapper scrollbar overflow-hidden">
 <table class="comfortable">
 <thead>
 <tr>
-<th>Operator</th>
+<th>Attribute</th>
 <th>Description</th>
-<th>Example</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code v-pre>site:</code></td>
-<td>Search within a specific domain</td>
-<td><code v-pre>site:example.com login</code></td>
+<td><strong>Culture &amp; Collaboration</strong></td>
+<td>Security is a shared responsibility; silos are broken down.</td>
 </tr>
 <tr>
-<td><code v-pre>inurl:</code></td>
-<td>Search within the URL</td>
-<td><code v-pre>inurl:admin</code></td>
+<td><strong>Automation</strong></td>
+<td>Security checks are codified and run automatically in CI/CD.</td>
 </tr>
 <tr>
-<td><code v-pre>intitle:</code></td>
-<td>Search in the page title</td>
-<td><code v-pre>intitle:&quot;index of&quot;</code></td>
+<td><strong>Shift‑Left</strong></td>
+<td>Security work (tests, scans, reviews) happens as early as possible.</td>
 </tr>
 <tr>
-<td><code v-pre>filetype:</code></td>
-<td>Search for specific file types</td>
-<td><code v-pre>filetype:pdf confidential</code></td>
+<td><strong>Continuous Feedback</strong></td>
+<td>Teams get actionable security data in real time.</td>
 </tr>
 <tr>
-<td><code v-pre>intext:</code></td>
-<td>Search in the body text</td>
-<td><code v-pre>intext:&quot;password&quot;</code></td>
-</tr>
-<tr>
-<td><code v-pre>ext:</code></td>
-<td>Same as <code v-pre>filetype:</code></td>
-<td><code v-pre>ext:sql</code></td>
-</tr>
-<tr>
-<td><code v-pre>-</code></td>
-<td>Exclude a term</td>
-<td><code v-pre>login -github</code></td>
-</tr>
-<tr>
-<td><code v-pre>&quot;</code></td>
-<td>Exact match</td>
-<td><code v-pre>&quot;DB_PASSWORD&quot;</code></td>
+<td><strong>Compliance as Code</strong></td>
+<td>Policies are version‑controlled and testable like application code.</td>
 </tr>
 </tbody>
 </table>
 </div>
-<doc-anchor-target id="real-world-dork-examples">
-    <h2>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#real-world-dork-examples">#</doc-anchor-trigger>
-        <span>Real-world Dork Examples</span>
-    </h2>
-</doc-anchor-target>
-<ul>
-<li><strong>Exposed environment files:</strong></li>
-</ul>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre translate="no" class="language-none"><code v-pre class="language-none">filetype:env &quot;DB_PASSWORD&quot;</code></pre>
-</doc-codeblock></div>
-<ul>
-<li><strong>Admin interfaces:</strong></li>
-</ul>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre translate="no" class="language-none"><code v-pre class="language-none">intitle:&quot;login&quot; inurl:admin</code></pre>
-</doc-codeblock></div>
-<ul>
-<li><strong>Open directories:</strong></li>
-</ul>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre translate="no" class="language-none"><code v-pre class="language-none">intitle:&quot;index of&quot; &quot;backup&quot;</code></pre>
-</doc-codeblock></div>
-<ul>
-<li><strong>Public logs:</strong></li>
-</ul>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre translate="no" class="language-none"><code v-pre class="language-none">ext:log site:example.com</code></pre>
-</doc-codeblock></div>
 <hr>
-<doc-anchor-target id="use-my-tool">
+<doc-anchor-target id="3-pillars-of-devsecops">
     <h2>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#use-my-tool">#</doc-anchor-trigger>
-        <span>Use my tool</span>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#3-pillars-of-devsecops">#</doc-anchor-trigger>
+        <span>3. Pillars of DevSecOps</span>
     </h2>
 </doc-anchor-target>
-<p>To make dorking easier and more accessible, I built a tool: <a href="https://dork.julez.cat"><strong>dork.julez.cat</strong></a></p>
-<p>The code is open-source and available on <a href="https://github.com/Julestblt/dork-generator">GitHub</a></p>
-<doc-anchor-target id="features">
-    <h3>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#features">#</doc-anchor-trigger>
-        <span>Features:</span>
-    </h3>
-</doc-anchor-target>
+<ol>
+<li><p><strong>People &amp; Culture</strong></p>
 <ul>
-<li>Pre-built dorks presets</li>
-<li>Instant query preview</li>
-<li>Search by filetype, keywords, and domain</li>
-<li>Easy copy &amp; paste</li>
-<li>No login, no tracking</li>
+<li>Shared goals and KPIs</li>
+<li>Security champions embedded in squads</li>
 </ul>
-<doc-anchor-target id="defensive-measures">
+</li>
+<li><p><strong>Process</strong></p>
+<ul>
+<li>Security user stories &amp; acceptance criteria</li>
+<li>Threat modeling and risk assessments in sprint planning</li>
+</ul>
+</li>
+<li><p><strong>Technology</strong></p>
+<ul>
+<li>Toolchain that integrates static (SAST), dynamic (DAST), dependency (SCA), and infrastructure (IaC) scanning</li>
+<li>Automated policy enforcement (e.g., OPA, Kyverno)</li>
+</ul>
+</li>
+</ol>
+<hr>
+<doc-anchor-target id="4-security-activities-across-the-sdlc">
     <h2>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#defensive-measures">#</doc-anchor-trigger>
-        <span>Defensive Measures</span>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#4-security-activities-across-the-sdlc">#</doc-anchor-trigger>
+        <span>4. Security Activities Across the SDLC</span>
     </h2>
 </doc-anchor-target>
-<p>If you maintain a website, here’s how to reduce your exposure:</p>
+<p><figure class="content-center">
+    <img src="../../../static/devsecops-definition/devsecops-activities.png" alt="Security Activities Across the SDLC" class="rounded-image-rounded border-image-border border-image-border-width" />
+    <figcaption class="caption">Security Activities Across the SDLC</figcaption>
+</figure>
+</p>
+<hr>
+<doc-anchor-target id="5-benefits">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#5-benefits">#</doc-anchor-trigger>
+        <span>5. Benefits</span>
+    </h2>
+</doc-anchor-target>
 <ul>
-<li>Block indexing via <code v-pre>robots.txt</code>:</li>
+<li><strong>Faster release cycles</strong> – security gates become automated quality checks, not blockers</li>
+<li><strong>Reduced mean‑time‑to‑remediate (MTTR)</strong> – vulnerabilities caught within minutes, not months</li>
+<li><strong>Regulatory compliance</strong> – evidence is generated automatically (security as data)</li>
+<li><strong>Improved team morale</strong> – developers gain confidence shipping secure code</li>
 </ul>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre translate="no" class="language-none"><code v-pre class="language-none">User-agent: *
-Disallow: /admin/
-Disallow: /config/
-Disallow: /backup/</code></pre>
-</doc-codeblock></div>
+<hr>
+<doc-anchor-target id="6-challenges--pitfalls">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#6-challenges--pitfalls">#</doc-anchor-trigger>
+        <span>6. Challenges &amp; Pitfalls</span>
+    </h2>
+</doc-anchor-target>
+<ol>
+<li><strong>Cultural resistance</strong> – &quot;Security slows us down&quot; mindset</li>
+<li><strong>Tool overload &amp; false positives</strong></li>
+<li><strong>Skill gaps</strong> – developers unfamiliar with secure coding</li>
+<li><strong>Legacy applications &amp; infrastructure</strong> that are hard to automate</li>
+</ol>
+<p><em>Mitigation tips:</em> start small with one team, tune scanners aggressively, invest in training, and measure success.</p>
+<hr>
+<doc-anchor-target id="7-getting-started-checklist">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#7-getting-started-checklist">#</doc-anchor-trigger>
+        <span>7. Getting Started Checklist</span>
+    </h2>
+</doc-anchor-target>
+<ul class="contains-task-list">
+<li class="task-list-item"><input disabled="disabled" type="checkbox" /> Identify a pilot project with an existing CI pipeline</li>
+<li class="task-list-item"><input disabled="disabled" type="checkbox" /> Integrate SAST &amp; dependency scanning in pull requests</li>
+<li class="task-list-item"><input disabled="disabled" type="checkbox" /> Add infrastructure‑as‑code validation (e.g., tfsec, kube‑score)</li>
+<li class="task-list-item"><input disabled="disabled" type="checkbox" /> Define security SLAs (e.g., block on critical/high CVEs)</li>
+<li class="task-list-item"><input disabled="disabled" type="checkbox" /> Establish a feedback channel (chatops, dashboards)</li>
+<li class="task-list-item"><input disabled="disabled" type="checkbox" /> Run a &quot;game day&quot; to test incident response</li>
+<li class="task-list-item"><input disabled="disabled" type="checkbox" /> Iterate, expand, share lessons learned</li>
+</ul>
+<hr>
+<doc-anchor-target id="8-best-practices">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#8-best-practices">#</doc-anchor-trigger>
+        <span>8. Best Practices</span>
+    </h2>
+</doc-anchor-target>
+<ul>
+<li><strong>Security as Code</strong> – version‑control policies, baselines, and exceptions.</li>
+<li><strong>Fail Fast, Fix Fast</strong> – stop the pipeline on critical issues, provide remediation snippets.</li>
+<li><strong>Threat‑Driven Development</strong> – update threat models continuously.</li>
+<li><strong>Security Champions</strong> – designate devs as first responders for security concerns.</li>
+<li><strong>Metrics &amp; KPIs</strong> – track time‑to‑fix, scan coverage, and defect density.</li>
+</ul>
+<hr>
+<doc-anchor-target id="9-conclusion">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#9-conclusion">#</doc-anchor-trigger>
+        <span>9. Conclusion</span>
+    </h2>
+</doc-anchor-target>
+<p>DevSecOps is <strong>not a toolset you can buy</strong>, but a cultural and technical shift where security becomes a <em>continuous</em>, <em>automated</em>, and <em>collaborative</em> part of delivering value. Teams that adopt DevSecOps release faster, lower risk, and build customer trust.</p>
 <blockquote>
-<p><span class="docs-emoji">&#x26A0;&#xFE0F;</span> <strong>Note:</strong> While <code v-pre>robots.txt</code> tells search engines not to index certain paths, it is publicly accessible and can unintentionally expose the structure of your site.<br />
-For example, listing <code v-pre>/backup/</code> or <code v-pre>/admin/</code> in <code v-pre>robots.txt</code> may reveal sensitive directories to attackers.<br />
-Avoid disclosing private paths unless strictly necessary, and always combine this with proper access controls (e.g., authentication, IP filtering).</p>
+<p><span class="docs-emoji">&#x26A1;</span>️ <em>Start small, automate ruthlessly, measure everything.</em></p>
 </blockquote>
-<ul>
-<li>Never store sensitive credentials in publicly accessible files</li>
-<li>Protect internal folders with strong authentication</li>
-<li>Regularly audit your domain using your own dorks</li>
-</ul>
 <hr>
-<doc-anchor-target id="-conclusion">
+<doc-anchor-target id="10-further-reading">
     <h2>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#-conclusion">#</doc-anchor-trigger>
-        <span><span class="docs-emoji">&#x1F4CC;</span> Conclusion</span>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#10-further-reading">#</doc-anchor-trigger>
+        <span>10. Further Reading</span>
     </h2>
 </doc-anchor-target>
-<p><strong>Google Dorking is a powerful recon technique</strong> for both red teamers and defenders.</p>
-<p>It allows you to:</p>
 <ul>
-<li>Uncover misconfigurations,</li>
-<li>Reveal exposed assets,</li>
-<li>Audit your own infrastructure.</li>
+<li><em>Accelerate: The Science of Lean Software and DevOps</em> — Forsgren, Humble &amp; Kim</li>
+<li><em>The DevSecOps Playbook</em> — Sounil Yu</li>
+<li>OWASP DevSecOps Guideline <a href="https://owasp.org/www-project-devsecops-guideline/">https://owasp.org/www-project-devsecops-guideline/</a></li>
+<li>DevOps Research &amp; Assessment (DORA) Reports</li>
 </ul>
-<p>Always <strong>stay ethical and legal</strong>.</p>
-<hr>
 
                                 
                                 <!-- Required only on API pages -->
@@ -372,16 +366,23 @@ Avoid disclosing private paths unless strictly necessary, and always combine thi
                             
                                 <nav id="retype-nextprev" class="print:hidden flex mt-14">
                                     <div class="w-1/2">
-                                        <a class="px-5 py-4 h-full flex items-center break-normal font-medium text-body-link border border-base-border hover:border-base-border-hover rounded-r rounded-l-lg transition-colors duration-150 relative hover:z-5" href="../../../articles/devsecops/devsecops-definition/">
+                                        <a class="px-5 py-4 h-full flex items-center break-normal font-medium text-body-link border border-base-border hover:border-base-border-hover rounded-l-lg transition-colors duration-150 relative hover:z-5" href="../../../articles/devsecops/commits-signing/">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="mr-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19 11H7.41l5.29-5.29a.996.996 0 10-1.41-1.41l-7 7a1 1 0 000 1.42l7 7a1.024 1.024 0 001.42-.01.996.996 0 000-1.41L7.41 13H19c.55 0 1-.45 1-1s-.45-1-1-1z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
                                             <span>
                                                 <span class="block text-xs font-normal text-base-text-muted">Previous</span>
-                                                <span class="block mt-1">What is Dev​Sec​Ops ?</span>
+                                                <span class="block mt-1">Commits signing</span>
                                             </span>
                                         </a>
                                     </div>
                             
                                     <div class="w-1/2">
+                                        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-normal font-medium text-body-link border border-base-border hover:border-base-border-hover rounded-r-lg transition-colors duration-150 relative hover:z-5" href="../../../articles/dorking/google-dorking/">
+                                            <span>
+                                                <span class="block text-xs font-normal text-right text-base-text-muted">Next</span>
+                                                <span class="block mt-1">Google Dorking Guide</span>
+                                            </span>
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="ml-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19.92 12.38a1 1 0 00-.22-1.09l-7-7a.996.996 0 10-1.41 1.41l5.3 5.3H5c-.55 0-1 .45-1 1s.45 1 1 1h11.59l-5.29 5.29a.996.996 0 000 1.41c.19.2.44.3.7.3s.51-.1.71-.29l7-7c.09-.09.16-.21.21-.33z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
+                                        </a>
                                     </div>
                                 </nav>
                             </footer>
@@ -422,6 +423,6 @@ Avoid disclosing private paths unless strictly necessary, and always combine thi
 
     <div id="retype-overlay-target"></div>
 
-    <script data-cfasync="false">window.__DOCS__ = { "title": "Google Dorking Guide", level: 3, icon: "file", hasPrism: false, hasMermaid: false, hasMath: false, tocDepth: 23 }</script>
+    <script data-cfasync="false">window.__DOCS__ = { "title": "What is DevSecOps ?", level: 3, icon: "file", hasPrism: false, hasMermaid: false, hasMath: false, tocDepth: 23 }</script>
 </body>
 </html>

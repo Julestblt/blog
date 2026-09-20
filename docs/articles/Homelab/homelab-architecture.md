@@ -25,7 +25,7 @@ The interesting part ended up being less Docker itself and more the boundaries b
 
 The diagram below is the current mental model of the platform. It deliberately leaves out secrets, private addresses and low-level identifiers: what matters here is how the components interact.
 
-![Homelab architecture: AI development, observability and delivery platform](/static/homelab/agentic-development-platform.png)
+![Homelab architecture: AI development, observability and delivery platform](/static/homelab/agentic-development-platform-v2.png)
 
 There are three major zones in the diagram:
 

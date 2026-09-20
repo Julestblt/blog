@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark">
-    <meta name="turbo-cache-control" content="no-cache" data-turbo-track="reload" data-track-token="4.6.0.843252334716">
+    <meta name="turbo-cache-control" content="no-cache" data-turbo-track="reload" data-track-token="4.6.0.843252455890">
 
     <!-- See retype.com -->
     <meta name="generator" content="Retype 4.6.0">
@@ -23,6 +23,10 @@
     <meta property="og:url" content="https://blog.julez.cat/articles/homelab/homelab-architecture/">
     <meta property="og:title" content="Building a private-first homelab for apps and AI agents">
     <meta property="og:description" content="TL;DR — My homelab is a small Debian server that runs my applications, deployment platform and AI development tooling. Public applications enter through">
+    <meta property="og:image" content="https://blog.julez.cat/static/homelab/agentic-development-platform.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Building a private-first homelab for apps and AI agents">
     <meta property="og:site_name" content="JuleZ">
     <meta property="og:locale" content="en_US">
 
@@ -31,6 +35,8 @@
     <meta name="twitter:url" content="https://blog.julez.cat/articles/homelab/homelab-architecture/">
     <meta name="twitter:title" content="Building a private-first homelab for apps and AI agents">
     <meta name="twitter:description" content="TL;DR — My homelab is a small Debian server that runs my applications, deployment platform and AI development tooling. Public applications enter through">
+    <meta name="twitter:image" content="https://blog.julez.cat/static/homelab/agentic-development-platform.png">
+    <meta name="twitter:image:alt" content="Building a private-first homelab for apps and AI agents">
 
     <!-- Alternate Markdown -->
     <link rel="alternate" type="text/markdown" href="https://blog.julez.cat/articles/homelab/homelab-architecture.md">
@@ -38,12 +44,12 @@
     <script data-cfasync="false">(function(){var cl=document.documentElement.classList,ls=localStorage.getItem("retype_scheme"),hd=cl.contains("dark"),hl=cl.contains("light"),wm=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;if(ls==="dark"||(!ls&&wm&&!hd&&!hl)){cl.remove("light");cl.add("dark")}else if(ls==="light"||(!ls&&!wm&&!hd&&!hl)){cl.remove("dark");cl.add("light")}})();</script>
 
     <link id="retype-favicon" rel="icon" href="../../../static/favicon.png" />
-    <link href="../../../resources/css/retype.css?v=4.6.0.843252334716" rel="stylesheet">
+    <link href="../../../resources/css/retype.css?v=4.6.0.843252455890" rel="stylesheet">
 
-    <script data-cfasync="false" src="../../../resources/js/config.js?v=4.6.0.843252334716" data-turbo-eval="false" defer></script>
+    <script data-cfasync="false" src="../../../resources/js/config.js?v=4.6.0.843252455890" data-turbo-eval="false" defer></script>
     <script data-cfasync="false" src="../../../resources/js/retype.js?v=4.6.0" data-turbo-eval="false" defer></script>
-    <script id="lunr-js" data-cfasync="false" src="../../../resources/js/lunr.js?v=4.6.0.843252334716" data-turbo-eval="false" defer></script>
-    <script id="prism-js" data-cfasync="false" src="../../../resources/js/prism.js?v=4.6.0.843252334716" defer></script>
+    <script id="lunr-js" data-cfasync="false" src="../../../resources/js/lunr.js?v=4.6.0.843252455890" data-turbo-eval="false" defer></script>
+    <script id="prism-js" data-cfasync="false" src="../../../resources/js/prism.js?v=4.6.0.843252455890" defer></script>
 </head>
 <body>
     <div id="retype-app" class="relative text-base antialiased text-base-text bg-base-bg font-body">
@@ -161,7 +167,7 @@
 </blockquote>
 <hr>
 <h2 id="why-i-built-it">Why I built it</h2>
-<p>I originally hosted most of my projects on managed platforms. That is convenient, but I wanted a machine I could fully control: deployments, networking, observability, development agents and the boring operational details that managed platforms normally hide.</p>
+<p>I originally hosted most of my projects on managed platforms. That is convenient, but I wanted a machine I could fully control: deployments, networking, observability, development agents and the operational details that managed platforms normally hide.</p>
 <p>The result is a small homelab built around a Lenovo ThinkCentre running Debian 13. It is not intended to reproduce a cloud provider at home. The goal is simpler:</p>
 <ul>
 <li>host my own applications;</li>
@@ -174,7 +180,18 @@
 <p>The interesting part ended up being less Docker itself and more the boundaries between <strong>public traffic, private administration, deployment automation and autonomous agents</strong>.</p>
 <hr>
 <h2 id="architecture-at-a-glance">Architecture at a glance</h2>
-<p>The platform can be thought of as four layers.</p>
+<p>The diagram below is the current mental model of the platform. It deliberately leaves out secrets, private addresses and low-level identifiers: what matters here is how the components interact.</p>
+<figure class="content-center">
+    <img src="../../../static/homelab/agentic-development-platform.png" alt="Homelab architecture: AI development, observability and delivery platform" class="max-w-full h-auto rounded-image-rounded border-image-border border-image-border-width" width="3694" height="934" />
+    <figcaption class="caption">Homelab architecture: AI development, observability and delivery platform</figcaption>
+</figure>
+<p>There are three major zones in the diagram:</p>
+<ul>
+<li><strong>AI Development Layer</strong> — Codex and Hermes operate on a shared project workspace and use OpenCode Go for model inference where appropriate.</li>
+<li><strong>Unified Gateway and Observability</strong> — one custom gateway exposes Hermes capabilities and aggregates server, Codex and OpenCode usage metrics.</li>
+<li><strong>Delivery Platform</strong> — GitHub, Dokploy, Traefik, Tailscale and Cloudflare connect development to deployment while keeping the administration plane private.</li>
+</ul>
+<p>That separation is intentional. An agent can work on code without needing the deployment dashboard to be public, and an application can be public without making SSH or Dokploy public.</p>
 <h3 id="public-delivery">Public delivery</h3>
 <p>Public applications such as my portfolio, Veloce and this Retype blog are deployed by Dokploy and routed internally by Traefik.</p>
 <p>I do <strong>not</strong> rely on inbound port forwarding from my router. A Cloudflare Tunnel initiated by the server provides the public path:</p>
@@ -191,7 +208,7 @@ Traefik
    |
 Application containers</code></pre>
 </doc-codeblock></div>
-<p>Cloudflare terminates the public side while <code translate="no" v-pre>cloudflared</code> maintains an outbound tunnel from the homelab. Traefik still performs application routing using the requested hostname.</p>
+<p>Cloudflare handles the public edge while <code translate="no" v-pre>cloudflared</code> maintains an outbound tunnel from the homelab. Traefik performs application routing using the requested hostname.</p>
 <h3 id="private-administration">Private administration</h3>
 <p>The control plane is deliberately different:</p>
 <div id="private-administration-code-1" class="codeblock-wrapper"><doc-codeblock>
@@ -209,13 +226,22 @@ Tailscale
 <p>GitHub remains the source of truth for application code. Dokploy pulls and deploys projects, while a narrowly exposed webhook endpoint allows GitHub to trigger deployments.</p>
 <p>For this blog, Retype is built by GitHub Actions and the generated static site is published to a dedicated branch. Dokploy serves that output with Nginx.</p>
 <h3 id="ai-development">AI development</h3>
-<p>The server is also becoming an agentic development environment.</p>
+<p>The left side of the diagram is the development layer.</p>
 <p>Codex is my interactive development agent, while Hermes is used for more autonomous tasks. OpenCode Go can act as a model provider. Both agents work against a shared project area under:</p>
 <div id="ai-development-code-1" class="codeblock-wrapper"><doc-codeblock>
 <pre translate="no" class="language-none"><code v-pre class="language-none">/srv/projects</code></pre>
 </doc-codeblock></div>
-<p>The idea is that an agent can enter a project, inspect it, edit files, run commands and tests, then commit and push through Git rather than manipulating deployed containers directly.</p>
-<p>A custom gateway provides a common surface for Hermes and for observability data such as server metrics and AI usage.</p>
+<p>An agent can enter a project, inspect it, edit files, run commands and tests, then commit and push through Git. GitHub is therefore the boundary between agent development and the deployment platform rather than having agents mutate production containers as their normal workflow.</p>
+<h3 id="observability-and-the-custom-gateway">Observability and the custom gateway</h3>
+<p>The lower part of the diagram represents a custom gateway that gives me one surface for:</p>
+<ul>
+<li>Hermes access;</li>
+<li>server CPU, memory, disk and service metrics;</li>
+<li>Codex usage/activity;</li>
+<li>OpenCode model/token usage;</li>
+<li>agent status and related telemetry.</li>
+</ul>
+<p>This means a dashboard or client can consume one API instead of knowing how every underlying tool exposes its data.</p>
 <hr>
 <h2 id="why-srvprojects-matters">Why <code translate="no" v-pre>/srv/projects</code> matters</h2>
 <p>Giving agents arbitrary access to a server is easy. Giving them a <strong>useful boundary</strong> is more interesting.</p>
@@ -237,7 +263,6 @@ Tailscale
   -&gt; GitHub
   -&gt; Dokploy deployment</code></pre>
 </doc-codeblock></div>
-<p>This also makes the Git repository the hand-off point between development automation and production deployment.</p>
 <p>A minimal setup looks like:</p>
 <div id="why-srvprojects-matters-code-3" class="codeblock-wrapper"><doc-codeblock>
 <pre translate="no" class="language-bash"><code v-pre class="language-bash">sudo mkdir -p /srv/projects
@@ -248,26 +273,6 @@ cd /srv/projects
 git clone git@github.com:&lt;owner&gt;/&lt;repository&gt;.git</code></pre>
 </doc-codeblock></div>
 <p>The exact permissions should be adapted to the users running the agents. I prefer granting access to this workspace explicitly instead of making the agent user broadly privileged.</p>
-<hr>
-<h2 id="the-custom-gateway">The custom gateway</h2>
-<p>I wanted one API surface instead of several unrelated local endpoints.</p>
-<p>The gateway aggregates:</p>
-<ul>
-<li>access to Hermes;</li>
-<li>server health and resource metrics;</li>
-<li>Codex usage/activity;</li>
-<li>OpenCode model/token usage;</li>
-<li>agent status and related telemetry.</li>
-</ul>
-<p>Conceptually:</p>
-<div id="the-custom-gateway-code-1" class="codeblock-wrapper"><doc-codeblock>
-<pre translate="no" class="language-none"><code v-pre class="language-none">Server metrics ----+
-Codex usage -------+
-OpenCode usage ----+--&gt; Custom Gateway --&gt; client/dashboard
-Hermes ------------+</code></pre>
-</doc-codeblock></div>
-<p>This makes it possible to build a single dashboard without coupling the frontend to the implementation details of every tool.</p>
-<p>The gateway itself is treated as infrastructure. Authentication and exposure are separate concerns from the applications it fronts; an endpoint existing locally does not imply it should be reachable from the public Internet.</p>
 <hr>
 <h2 id="rebuilding-the-core">Rebuilding the core</h2>
 <p>This is not a complete bootstrap script, but these are the main pieces I would need after a clean Debian installation.</p>
@@ -285,7 +290,7 @@ sudo usermod -aG docker &quot;$USER&quot;</code></pre>
 <pre translate="no" class="language-bash"><code v-pre class="language-bash">tailscale status
 tailscale ip</code></pre>
 </doc-codeblock></div>
-<p>The important design decision is not the install command: it is that administrative services are addressed through Tailscale rather than opened on the router.</p>
+<p>The important design decision is not the install command: administrative services are addressed through Tailscale rather than opened on the router.</p>
 <h3 id="cloudflare-tunnel">Cloudflare Tunnel</h3>
 <p>After installing <code translate="no" v-pre>cloudflared</code>, create/login to a tunnel and keep its configuration in a root-controlled location such as:</p>
 <div id="cloudflare-tunnel-code-1" class="codeblock-wrapper"><doc-codeblock>
@@ -335,11 +340,11 @@ docker network ls</code></pre>
 <p><strong>applications may be public; administration is private by default.</strong></p>
 <p>That rule shaped the rest of the homelab, including how GitHub webhooks and AI agents are integrated.</p>
 <hr>
-<h2 id="next">Next</h2>
-<p>The next articles go deeper into two parts of this setup:</p>
+<h2 id="going-deeper">Going deeper</h2>
+<p>This overview is intentionally broad. The other articles in this series focus on:</p>
 <ul>
-<li>how I combined Cloudflare Tunnel, Tailscale, Traefik and Dokploy without exposing the control plane;</li>
-<li>how Codex, Hermes, OpenCode Go and <code translate="no" v-pre>/srv/projects</code> turn the same machine into an agentic development environment.</li>
+<li><strong>networking and exposure</strong> — Cloudflare Tunnel, Tailscale, Traefik, Dokploy, restricted webhooks and the debugging process;</li>
+<li><strong>agentic development</strong> — Codex, Hermes, OpenCode Go, <code translate="no" v-pre>/srv/projects</code>, the custom gateway and observability.</li>
 </ul>
 
                 

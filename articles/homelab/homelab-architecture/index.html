@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="color-scheme" content="light dark">
-    <meta name="turbo-cache-control" content="no-cache" data-turbo-track="reload" data-track-token="4.6.0.843252746650">
+    <meta name="turbo-cache-control" content="no-cache" data-turbo-track="reload" data-track-token="4.6.0.843253296178">
 
     <!-- See retype.com -->
     <meta name="generator" content="Retype 4.6.0">
@@ -23,7 +23,7 @@
     <meta property="og:url" content="https://blog.julez.cat/articles/homelab/homelab-architecture/">
     <meta property="og:title" content="Building a private-first homelab for apps and AI agents">
     <meta property="og:description" content="TL;DR — My homelab is a small Debian server that runs my applications, deployment platform and AI development tooling. Public applications enter through">
-    <meta property="og:image" content="https://blog.julez.cat/static/homelab/agentic-development-platform.png">
+    <meta property="og:image" content="https://blog.julez.cat/static/homelab/agentic-development-platform-v2.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="Building a private-first homelab for apps and AI agents">
@@ -35,7 +35,7 @@
     <meta name="twitter:url" content="https://blog.julez.cat/articles/homelab/homelab-architecture/">
     <meta name="twitter:title" content="Building a private-first homelab for apps and AI agents">
     <meta name="twitter:description" content="TL;DR — My homelab is a small Debian server that runs my applications, deployment platform and AI development tooling. Public applications enter through">
-    <meta name="twitter:image" content="https://blog.julez.cat/static/homelab/agentic-development-platform.png">
+    <meta name="twitter:image" content="https://blog.julez.cat/static/homelab/agentic-development-platform-v2.png">
     <meta name="twitter:image:alt" content="Building a private-first homelab for apps and AI agents">
 
     <!-- Alternate Markdown -->
@@ -44,12 +44,12 @@
     <script data-cfasync="false">(function(){var cl=document.documentElement.classList,ls=localStorage.getItem("retype_scheme"),hd=cl.contains("dark"),hl=cl.contains("light"),wm=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;if(ls==="dark"||(!ls&&wm&&!hd&&!hl)){cl.remove("light");cl.add("dark")}else if(ls==="light"||(!ls&&!wm&&!hd&&!hl)){cl.remove("dark");cl.add("light")}})();</script>
 
     <link id="retype-favicon" rel="icon" href="../../../static/favicon.png" />
-    <link href="../../../resources/css/retype.css?v=4.6.0.843252746650" rel="stylesheet">
+    <link href="../../../resources/css/retype.css?v=4.6.0.843253296178" rel="stylesheet">
 
-    <script data-cfasync="false" src="../../../resources/js/config.js?v=4.6.0.843252746650" data-turbo-eval="false" defer></script>
+    <script data-cfasync="false" src="../../../resources/js/config.js?v=4.6.0.843253296178" data-turbo-eval="false" defer></script>
     <script data-cfasync="false" src="../../../resources/js/retype.js?v=4.6.0" data-turbo-eval="false" defer></script>
-    <script id="lunr-js" data-cfasync="false" src="../../../resources/js/lunr.js?v=4.6.0.843252746650" data-turbo-eval="false" defer></script>
-    <script id="prism-js" data-cfasync="false" src="../../../resources/js/prism.js?v=4.6.0.843252746650" defer></script>
+    <script id="lunr-js" data-cfasync="false" src="../../../resources/js/lunr.js?v=4.6.0.843253296178" data-turbo-eval="false" defer></script>
+    <script id="prism-js" data-cfasync="false" src="../../../resources/js/prism.js?v=4.6.0.843253296178" defer></script>
 </head>
 <body>
     <div id="retype-app" class="relative text-base antialiased text-base-text bg-base-bg font-body">
@@ -182,7 +182,7 @@
 <h2 id="architecture-at-a-glance">Architecture at a glance</h2>
 <p>The diagram below is the current mental model of the platform. It deliberately leaves out secrets, private addresses and low-level identifiers: what matters here is how the components interact.</p>
 <figure class="content-center">
-    <img src="../../../static/homelab/agentic-development-platform.png" alt="Homelab architecture: AI development, observability and delivery platform" class="max-w-full h-auto rounded-image-rounded border-image-border border-image-border-width" width="1017" height="2542" />
+    <img src="../../../static/homelab/agentic-development-platform-v2.png" alt="Homelab architecture: AI development, observability and delivery platform" class="max-w-full h-auto rounded-image-rounded border-image-border border-image-border-width" width="1017" height="2542" />
     <figcaption class="caption">Homelab architecture: AI development, observability and delivery platform</figcaption>
 </figure>
 <p>There are three major zones in the diagram:</p>

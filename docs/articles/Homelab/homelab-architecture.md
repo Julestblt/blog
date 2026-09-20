@@ -6,7 +6,7 @@
 
 ## Why I built it
 
-I originally hosted most of my projects on managed platforms. That is convenient, but I wanted a machine I could fully control: deployments, networking, observability, development agents and the boring operational details that managed platforms normally hide.
+I originally hosted most of my projects on managed platforms. That is convenient, but I wanted a machine I could fully control: deployments, networking, observability, development agents and the operational details that managed platforms normally hide.
 
 The result is a small homelab built around a Lenovo ThinkCentre running Debian 13. It is not intended to reproduce a cloud provider at home. The goal is simpler:
 
@@ -23,7 +23,17 @@ The interesting part ended up being less Docker itself and more the boundaries b
 
 ## Architecture at a glance
 
-The platform can be thought of as four layers.
+The diagram below is the current mental model of the platform. It deliberately leaves out secrets, private addresses and low-level identifiers: what matters here is how the components interact.
+
+![Homelab architecture: AI development, observability and delivery platform](/static/homelab/agentic-development-platform.png)
+
+There are three major zones in the diagram:
+
+- **AI Development Layer** — Codex and Hermes operate on a shared project workspace and use OpenCode Go for model inference where appropriate.
+- **Unified Gateway and Observability** — one custom gateway exposes Hermes capabilities and aggregates server, Codex and OpenCode usage metrics.
+- **Delivery Platform** — GitHub, Dokploy, Traefik, Tailscale and Cloudflare connect development to deployment while keeping the administration plane private.
+
+That separation is intentional. An agent can work on code without needing the deployment dashboard to be public, and an application can be public without making SSH or Dokploy public.
 
 ### Public delivery
 
@@ -45,7 +55,7 @@ Traefik
 Application containers
 ```
 
-Cloudflare terminates the public side while `cloudflared` maintains an outbound tunnel from the homelab. Traefik still performs application routing using the requested hostname.
+Cloudflare handles the public edge while `cloudflared` maintains an outbound tunnel from the homelab. Traefik performs application routing using the requested hostname.
 
 ### Private administration
 
@@ -73,7 +83,7 @@ For this blog, Retype is built by GitHub Actions and the generated static site i
 
 ### AI development
 
-The server is also becoming an agentic development environment.
+The left side of the diagram is the development layer.
 
 Codex is my interactive development agent, while Hermes is used for more autonomous tasks. OpenCode Go can act as a model provider. Both agents work against a shared project area under:
 
@@ -81,9 +91,19 @@ Codex is my interactive development agent, while Hermes is used for more autonom
 /srv/projects
 ```
 
-The idea is that an agent can enter a project, inspect it, edit files, run commands and tests, then commit and push through Git rather than manipulating deployed containers directly.
+An agent can enter a project, inspect it, edit files, run commands and tests, then commit and push through Git. GitHub is therefore the boundary between agent development and the deployment platform rather than having agents mutate production containers as their normal workflow.
 
-A custom gateway provides a common surface for Hermes and for observability data such as server metrics and AI usage.
+### Observability and the custom gateway
+
+The lower part of the diagram represents a custom gateway that gives me one surface for:
+
+- Hermes access;
+- server CPU, memory, disk and service metrics;
+- Codex usage/activity;
+- OpenCode model/token usage;
+- agent status and related telemetry.
+
+This means a dashboard or client can consume one API instead of knowing how every underlying tool exposes its data.
 
 ---
 
@@ -113,8 +133,6 @@ Task
   -> Dokploy deployment
 ```
 
-This also makes the Git repository the hand-off point between development automation and production deployment.
-
 A minimal setup looks like:
 
 ```bash
@@ -127,33 +145,6 @@ git clone git@github.com:<owner>/<repository>.git
 ```
 
 The exact permissions should be adapted to the users running the agents. I prefer granting access to this workspace explicitly instead of making the agent user broadly privileged.
-
----
-
-## The custom gateway
-
-I wanted one API surface instead of several unrelated local endpoints.
-
-The gateway aggregates:
-
-- access to Hermes;
-- server health and resource metrics;
-- Codex usage/activity;
-- OpenCode model/token usage;
-- agent status and related telemetry.
-
-Conceptually:
-
-```text
-Server metrics ----+
-Codex usage -------+
-OpenCode usage ----+--> Custom Gateway --> client/dashboard
-Hermes ------------+
-```
-
-This makes it possible to build a single dashboard without coupling the frontend to the implementation details of every tool.
-
-The gateway itself is treated as infrastructure. Authentication and exposure are separate concerns from the applications it fronts; an endpoint existing locally does not imply it should be reachable from the public Internet.
 
 ---
 
@@ -181,7 +172,7 @@ tailscale status
 tailscale ip
 ```
 
-The important design decision is not the install command: it is that administrative services are addressed through Tailscale rather than opened on the router.
+The important design decision is not the install command: administrative services are addressed through Tailscale rather than opened on the router.
 
 ### Cloudflare Tunnel
 
@@ -256,9 +247,9 @@ That rule shaped the rest of the homelab, including how GitHub webhooks and AI a
 
 ---
 
-## Next
+## Going deeper
 
-The next articles go deeper into two parts of this setup:
+This overview is intentionally broad. The other articles in this series focus on:
 
-- how I combined Cloudflare Tunnel, Tailscale, Traefik and Dokploy without exposing the control plane;
-- how Codex, Hermes, OpenCode Go and `/srv/projects` turn the same machine into an agentic development environment.
+- **networking and exposure** — Cloudflare Tunnel, Tailscale, Traefik, Dokploy, restricted webhooks and the debugging process;
+- **agentic development** — Codex, Hermes, OpenCode Go, `/srv/projects`, the custom gateway and observability.

@@ -10,30 +10,30 @@
     <meta name="generator" content="Retype 4.6.0">
 
     <!-- Primary Meta Tags -->
-    <title>Public apps, private control plane: networking a Dokploy homelab</title>
-    <meta name="title" content="Public apps, private control plane: networking a Dokploy homelab">
-    <meta name="description" content="Running an application at home is easy until it has to be reachable from the Internet.">
+    <title>Turning my homelab into an AI development environment</title>
+    <meta name="title" content="Turning my homelab into an AI development environment">
+    <meta name="description" content="My homelab started as a place to deploy applications. It gradually became something more interesting: a development environment where AI agents can work on real repositories, run tools and ship changes through the same Git workflow I use manually.">
 
     <!-- Canonical -->
-    <link rel="canonical" href="https://blog.julez.cat/articles/homelab/networking-and-exposure/">
+    <link rel="canonical" href="https://blog.julez.cat/articles/homelab/agentic-development/">
     <link rel="sitemap" type="application/xml" title="Sitemap" href="https://blog.julez.cat/sitemap.xml">
 
     <!-- Open Graph -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://blog.julez.cat/articles/homelab/networking-and-exposure/">
-    <meta property="og:title" content="Public apps, private control plane: networking a Dokploy homelab">
-    <meta property="og:description" content="Running an application at home is easy until it has to be reachable from the Internet.">
+    <meta property="og:url" content="https://blog.julez.cat/articles/homelab/agentic-development/">
+    <meta property="og:title" content="Turning my homelab into an AI development environment">
+    <meta property="og:description" content="My homelab started as a place to deploy applications. It gradually became something more interesting: a development environment where AI agents can work on real repositories, run tools and ship changes through the same Git workflow I use manually.">
     <meta property="og:site_name" content="JuleZ">
     <meta property="og:locale" content="en_US">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://blog.julez.cat/articles/homelab/networking-and-exposure/">
-    <meta name="twitter:title" content="Public apps, private control plane: networking a Dokploy homelab">
-    <meta name="twitter:description" content="Running an application at home is easy until it has to be reachable from the Internet.">
+    <meta name="twitter:url" content="https://blog.julez.cat/articles/homelab/agentic-development/">
+    <meta name="twitter:title" content="Turning my homelab into an AI development environment">
+    <meta name="twitter:description" content="My homelab started as a place to deploy applications. It gradually became something more interesting: a development environment where AI agents can work on real repositories, run tools and ship changes through the same Git workflow I use manually.">
 
     <!-- Alternate Markdown -->
-    <link rel="alternate" type="text/markdown" href="https://blog.julez.cat/articles/homelab/networking-and-exposure.md">
+    <link rel="alternate" type="text/markdown" href="https://blog.julez.cat/articles/homelab/agentic-development.md">
 
     <script data-cfasync="false">(function(){var cl=document.documentElement.classList,ls=localStorage.getItem("retype_scheme"),hd=cl.contains("dark"),hl=cl.contains("light"),wm=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;if(ls==="dark"||(!ls&&wm&&!hd&&!hl)){cl.remove("light");cl.add("dark")}else if(ls==="light"||(!ls&&!wm&&!hd&&!hl)){cl.remove("dark");cl.add("light")}})();</script>
 
@@ -155,184 +155,206 @@
                 <doc-page-actions></doc-page-actions>
 
                 <!-- Page content  -->
-<h1 id="public-apps-private-control-plane-networking-a-dokploy-homelab">Public apps, private control plane: networking a Dokploy homelab</h1>
-<p>Running an application at home is easy until it has to be reachable from the Internet.</p>
-<p>My first instinct was to treat the homelab like a small VPS: expose ports, point DNS at it and let the reverse proxy handle the rest. In practice I wanted a different security model, especially because the same server also runs Dokploy, SSH and development agents.</p>
-<p>The final design uses <strong>Cloudflare Tunnel for public applications</strong> and <strong>Tailscale for private administration</strong>.</p>
+<h1 id="turning-my-homelab-into-an-ai-development-environment">Turning my homelab into an AI development environment</h1>
+<p>My homelab started as a place to deploy applications. It gradually became something more interesting: a development environment where AI agents can work on real repositories, run tools and ship changes through the same Git workflow I use manually.</p>
+<p>The main pieces are <strong>Codex</strong>, <strong>Hermes Agent</strong>, <strong>OpenCode Go</strong>, a shared <code translate="no" v-pre>/srv/projects</code> workspace and a custom gateway for agent access and metrics.</p>
 <hr>
-<h2 id="the-two-network-planes">The two network planes</h2>
-<p>The public path is:</p>
-<div id="the-two-network-planes-code-1" class="codeblock-wrapper"><doc-codeblock>
-<pre translate="no" class="language-none"><code v-pre class="language-none">Internet
+<h2 id="two-agents-different-jobs">Two agents, different jobs</h2>
+<p>I do not treat every agent as interchangeable.</p>
+<p><strong>Codex CLI</strong> is primarily my interactive development agent. I launch it inside a project when I want an agent to inspect the repository, implement something, run tests and iterate with me.</p>
+<p><strong>Hermes Agent</strong> is aimed at more autonomous server-side workflows. It has access to tools such as terminal/process operations, file operations, code execution, browser automation and web tooling.</p>
+<p>Both can use external model infrastructure; OpenCode Go is one of the providers I use for model inference.</p>
+<p>Conceptually:</p>
+<div id="two-agents-different-jobs-code-1" class="codeblock-wrapper"><doc-codeblock>
+<pre translate="no" class="language-none"><code v-pre class="language-none">Developer
    |
-Cloudflare
-   |
-Cloudflare Tunnel
-   |
-127.0.0.1:80
-   |
-Traefik
-   |
-Application</code></pre>
+   +--&gt; Codex --------+
+   |                  |
+   +--&gt; Hermes -------+--&gt; Model provider
+          |
+          +--&gt; tools / terminal / files</code></pre>
 </doc-codeblock></div>
-<p>The private path is:</p>
-<div id="the-two-network-planes-code-2" class="codeblock-wrapper"><doc-codeblock>
-<pre translate="no" class="language-none"><code v-pre class="language-none">My devices
-   |
-Tailscale
-   |
-Homelab
-   +-- SSH
-   +-- Dokploy
-   +-- private services</code></pre>
-</doc-codeblock></div>
-<p>This avoids making the Dokploy dashboard public just because the applications managed by Dokploy are public.</p>
+<p>The useful part is not simply having two AI CLIs installed. It is connecting them to a controlled project workspace and a normal delivery workflow.</p>
 <hr>
-<h2 id="why-not-expose-dokploy">Why not expose Dokploy?</h2>
-<p>Dokploy is part of the control plane. It can deploy applications and therefore has considerably more authority than a normal frontend.</p>
-<p>There is little value in making its dashboard globally reachable when I only administer it from my own devices.</p>
-<p>Tailscale gives those devices a private network path. A custom domain can still resolve to the server&#x27;s Tailscale address if desired, but it remains unreachable to normal Internet clients.</p>
-<p>The same logic applies to SSH.</p>
+<h2 id="a-shared-workspace-srvprojects">A shared workspace: <code translate="no" v-pre>/srv/projects</code></h2>
+<p>Projects intended for agent work live under:</p>
+<div id="a-shared-workspace-srvprojects-code-1" class="codeblock-wrapper"><doc-codeblock>
+<pre translate="no" class="language-none"><code v-pre class="language-none">/srv/projects</code></pre>
+</doc-codeblock></div>
+<p>For example:</p>
+<div id="a-shared-workspace-srvprojects-code-2" class="codeblock-wrapper"><doc-codeblock>
+<pre translate="no" class="language-none"><code v-pre class="language-none">/srv/projects/
+├── veloce/
+├── portfolio/
+├── blog/
+└── ...</code></pre>
+</doc-codeblock></div>
+<p>That gives the agents a predictable place to operate.</p>
+<p>A basic setup:</p>
+<div id="a-shared-workspace-srvprojects-code-3" class="codeblock-wrapper"><doc-codeblock>
+<pre translate="no" class="language-bash"><code v-pre class="language-bash">sudo mkdir -p /srv/projects
+sudo chown &lt;agent-user&gt;:&lt;agent-group&gt; /srv/projects
+sudo chmod 750 /srv/projects</code></pre>
+</doc-codeblock></div>
+<p>Repositories can then be cloned normally:</p>
+<div id="a-shared-workspace-srvprojects-code-4" class="codeblock-wrapper"><doc-codeblock>
+<pre translate="no" class="language-bash"><code v-pre class="language-bash">cd /srv/projects
+git clone git@github.com:&lt;owner&gt;/&lt;repo&gt;.git</code></pre>
+</doc-codeblock></div>
+<p>I configure Git/SSH for the identity that should be allowed to push. I do <strong>not</strong> put private keys, provider tokens or credentials inside repositories.</p>
+<p>The workflow is then intentionally boring:</p>
+<div id="a-shared-workspace-srvprojects-code-5" class="codeblock-wrapper"><doc-codeblock>
+<pre translate="no" class="language-none"><code v-pre class="language-none">Agent receives task
+       |
+       v
+/srv/projects/repository
+       |
+ inspect / edit / test
+       |
+       v
+   git commit
+       |
+       v
+    git push
+       |
+       v
+     GitHub
+       |
+       v
+     Dokploy
+       |
+       v
+   application</code></pre>
+</doc-codeblock></div>
+<p>That is a feature. Production deployment remains downstream of Git rather than allowing an agent to mutate a running application as the primary workflow.</p>
 <hr>
-<h2 id="public-applications-with-cloudflare-tunnel">Public applications with Cloudflare Tunnel</h2>
-<p><code translate="no" v-pre>cloudflared</code> runs on the homelab and initiates the connection to Cloudflare. No inbound NAT rule is required on my router.</p>
-<p>A reduced configuration:</p>
-<div id="public-applications-with-cloudflare-tunnel-code-1" class="codeblock-wrapper"><doc-codeblock>
-<pre translate="no" class="language-yaml"><code v-pre class="language-yaml">tunnel: &lt;tunnel-id&gt;
-credentials-file: /root/.cloudflared/&lt;tunnel-id&gt;.json
-
-ingress:
-  - hostname: app.example.com
-    service: http://127.0.0.1:80
-    originRequest:
-      httpHostHeader: app.example.com
-
-  - hostname: blog.example.com
-    service: http://127.0.0.1:80
-    originRequest:
-      httpHostHeader: blog.example.com
-
-  - service: http_status:404</code></pre>
+<h2 id="codex-and-opencode-go">Codex and OpenCode Go</h2>
+<p>Codex can be configured with a custom model provider. The provider configuration belongs in the local Codex configuration rather than the repository.</p>
+<p>A sanitized example:</p>
+<div id="codex-and-opencode-go-code-1" class="codeblock-wrapper"><doc-codeblock>
+<pre translate="no" class="language-toml"><code v-pre class="language-toml">[model_providers.opencode]
+name = &quot;OpenCode Go&quot;
+base_url = &quot;&lt;provider-api-base&gt;&quot;
+env_key = &quot;OPENCODE_API_KEY&quot;
+requires_openai_auth = false</code></pre>
 </doc-codeblock></div>
-<p>The <code translate="no" v-pre>httpHostHeader</code> is important in this architecture because Traefik routes applications by hostname.</p>
-<p>Before restarting the daemon I validate the file:</p>
-<div id="public-applications-with-cloudflare-tunnel-code-2" class="codeblock-wrapper"><doc-codeblock>
-<pre translate="no" class="language-bash"><code v-pre class="language-bash">cloudflared tunnel --config /etc/cloudflared/config.yml ingress validate</code></pre>
+<p>Then keep the credential outside source control:</p>
+<div id="codex-and-opencode-go-code-2" class="codeblock-wrapper"><doc-codeblock>
+<pre translate="no" class="language-bash"><code v-pre class="language-bash">export OPENCODE_API_KEY=&quot;&lt;token&gt;&quot;
+chmod 600 ~/.codex/config.toml</code></pre>
 </doc-codeblock></div>
-<p>I can also see which ingress rule would match:</p>
-<div id="public-applications-with-cloudflare-tunnel-code-3" class="codeblock-wrapper"><doc-codeblock>
-<pre translate="no" class="language-bash"><code v-pre class="language-bash">cloudflared tunnel --config /etc/cloudflared/config.yml \
-  ingress rule https://app.example.com/</code></pre>
+<p>Provider compatibility depends on the API exposed by the selected model, so I keep this layer replaceable instead of baking one model into the project.</p>
+<hr>
+<h2 id="hermes-as-the-autonomous-side">Hermes as the autonomous side</h2>
+<p>Hermes runs on the homelab and is configured with the tools it needs for development and operations.</p>
+<p>My setup focuses on:</p>
+<ul>
+<li>terminal and process access;</li>
+<li>file operations;</li>
+<li>code execution;</li>
+<li>browser automation;</li>
+<li>web search/scraping;</li>
+<li>vision when useful;</li>
+<li>task planning.</li>
+</ul>
+<p>I deliberately started from a minimal configuration and enabled capabilities as they became useful.</p>
+<p>The important security boundary is again the environment around the agent: filesystem permissions, Git credentials, network exposure and which commands/services the agent can reach matter more than the prompt saying &quot;be careful&quot;.</p>
+<hr>
+<h2 id="one-gateway-for-agents-and-observability">One gateway for agents and observability</h2>
+<p>I built a custom gateway to avoid exposing a collection of unrelated internal endpoints.</p>
+<p>It acts as a unified API for the pieces I want to consume elsewhere:</p>
+<div id="one-gateway-for-agents-and-observability-code-1" class="codeblock-wrapper"><doc-codeblock>
+<pre translate="no" class="language-none"><code v-pre class="language-none">                 +-- server metrics
+                 |
+Client --&gt; Gateway +-- Codex usage/activity
+                 |
+                 +-- OpenCode model/token usage
+                 |
+                 +-- Hermes agent endpoint/status</code></pre>
 </doc-codeblock></div>
-<p>Then:</p>
-<div id="public-applications-with-cloudflare-tunnel-code-4" class="codeblock-wrapper"><doc-codeblock>
-<pre translate="no" class="language-bash"><code v-pre class="language-bash">sudo systemctl restart cloudflared
+<p>This lets a dashboard ask one service for infrastructure and AI usage information.</p>
+<p>Metrics I care about include:</p>
+<ul>
+<li>CPU, memory, disk and service health;</li>
+<li>Codex activity/usage;</li>
+<li>OpenCode model and token usage;</li>
+<li>Hermes status and usage.</li>
+</ul>
+<p>The gateway is also a useful abstraction boundary. If the implementation of one metric source changes, clients do not need to know.</p>
+<hr>
+<h2 id="running-the-gateway-safely">Running the gateway safely</h2>
+<p>I prefer binding internal services to localhost or a private interface first:</p>
+<div id="running-the-gateway-safely-code-1" class="codeblock-wrapper"><doc-codeblock>
+<pre translate="no" class="language-none"><code v-pre class="language-none">127.0.0.1:&lt;port&gt;</code></pre>
+</doc-codeblock></div>
+<p>Then I decide explicitly how a consumer reaches them:</p>
+<ul>
+<li>Tailscale for private clients;</li>
+<li>a narrowly scoped Cloudflare Tunnel rule if something genuinely needs public access;</li>
+<li>no exposure at all for purely local integrations.</li>
+</ul>
+<p>Useful checks:</p>
+<div id="running-the-gateway-safely-code-2" class="codeblock-wrapper"><doc-codeblock>
+<pre translate="no" class="language-bash"><code v-pre class="language-bash">ss -lntp
+tailscale status
+docker ps
+systemctl --type=service --state=running</code></pre>
+</doc-codeblock></div>
+<p>The goal is to avoid accidentally turning &quot;I made an API&quot; into &quot;I published an administration API to the Internet&quot;.</p>
+<hr>
+<h2 id="recreating-the-agent-workspace">Recreating the agent workspace</h2>
+<p>After a fresh server install, the high-level recovery sequence is:</p>
+<div id="recreating-the-agent-workspace-code-1" class="codeblock-wrapper"><doc-codeblock>
+<pre translate="no" class="language-bash"><code v-pre class="language-bash"># Workspace
+sudo mkdir -p /srv/projects
+sudo chown &lt;agent-user&gt;:&lt;agent-group&gt; /srv/projects
+sudo chmod 750 /srv/projects
+
+# Git
+sudo apt update
+sudo apt install -y git openssh-client
+
+# Verify repository access
+ssh -T git@github.com
+
+# Restore projects
+cd /srv/projects
+git clone git@github.com:&lt;owner&gt;/&lt;repo&gt;.git
+
+# Verify the network/control plane
+tailscale status
+docker ps
 sudo systemctl status cloudflared --no-pager</code></pre>
 </doc-codeblock></div>
+<p>Codex and Hermes can then be installed/configured independently and pointed at the workspace.</p>
+<p>Secrets should be restored from the chosen secret store or environment configuration rather than copied into documentation or Git.</p>
 <hr>
-<h2 id="the-github-webhook-problem">The GitHub webhook problem</h2>
-<p>Private administration created one interesting problem: GitHub cannot call an endpoint that only exists inside my Tailscale network.</p>
-<p>Making all of Dokploy public just to receive a webhook would defeat the design.</p>
-<p>Instead I created a dedicated public hostname and allow only the deployment endpoint through the Cloudflare Tunnel:</p>
-<div id="the-github-webhook-problem-code-1" class="codeblock-wrapper"><doc-codeblock>
-<pre translate="no" class="language-yaml"><code v-pre class="language-yaml">- hostname: deploy.example.com
-  path: ^/api/deploy/[^/]+/?$
-  service: http://127.0.0.1:3000
-
-- service: http_status:404</code></pre>
+<h2 id="why-this-architecture-is-useful">Why this architecture is useful</h2>
+<p>The homelab now has a feedback loop:</p>
+<div id="why-this-architecture-is-useful-code-1" class="codeblock-wrapper"><doc-codeblock>
+<pre translate="no" class="language-none"><code v-pre class="language-none">observe
+   |
+   v
+agent reasons
+   |
+   v
+edit project
+   |
+   v
+test
+   |
+   v
+commit / push
+   |
+   v
+deploy
+   |
+   v
+observe</code></pre>
 </doc-codeblock></div>
-<p>The exact hostname and identifiers are intentionally omitted here.</p>
-<p>The result is:</p>
-<div id="the-github-webhook-problem-code-2" class="codeblock-wrapper"><doc-codeblock>
-<pre translate="no" class="language-none"><code v-pre class="language-none">GitHub
-  |
-  | only deployment webhook path
-  v
-Cloudflare Tunnel
-  |
-  v
-Dokploy webhook endpoint
-
-Internet --X--&gt; Dokploy dashboard</code></pre>
-</doc-codeblock></div>
-<p>This is much narrower than publishing the entire administration interface.</p>
-<p>A useful test is to check that an unrelated path returns 404 while the configured webhook route reaches the application.</p>
-<hr>
-<h2 id="debugging-502s">Debugging 502s</h2>
-<p>One issue I hit while deploying a static Retype site was a classic <code translate="no" v-pre>502 Bad Gateway</code>.</p>
-<p>Traefik was routing to port <code translate="no" v-pre>3000</code>:</p>
-<div id="debugging-502s-code-1" class="codeblock-wrapper"><doc-codeblock>
-<pre translate="no" class="language-yaml"><code v-pre class="language-yaml">servers:
-  - url: http://blog-frontend:3000</code></pre>
-</doc-codeblock></div>
-<p>but the static Nginx container listened on port <code translate="no" v-pre>80</code>.</p>
-<p>The container itself was healthy:</p>
-<div id="debugging-502s-code-2" class="codeblock-wrapper"><doc-codeblock>
-<pre translate="no" class="language-bash"><code v-pre class="language-bash">docker ps
-docker logs --tail 100 &lt;container&gt;</code></pre>
-</doc-codeblock></div>
-<p>From inside Traefik I could reach Nginx:</p>
-<div id="debugging-502s-code-3" class="codeblock-wrapper"><doc-codeblock>
-<pre translate="no" class="language-bash"><code v-pre class="language-bash">docker exec &lt;traefik-container&gt; \
-  wget -S -O /dev/null http://&lt;service&gt;:80/ 2&gt;&amp;1</code></pre>
-</doc-codeblock></div>
-<p>The fix was simply to configure the Dokploy domain with container port <code translate="no" v-pre>80</code>.</p>
-<p>The best local test was:</p>
-<div id="debugging-502s-code-4" class="codeblock-wrapper"><doc-codeblock>
-<pre translate="no" class="language-bash"><code v-pre class="language-bash">curl -I -H &quot;Host: blog.example.com&quot; http://127.0.0.1/</code></pre>
-</doc-codeblock></div>
-<p>If that returns <code translate="no" v-pre>200</code>, Traefik and the application route are working before Cloudflare or public DNS are even involved.</p>
-<hr>
-<h2 id="static-sites-and-dokploy">Static sites and Dokploy</h2>
-<p>Retype generates a static site. My existing GitHub Action builds it:</p>
-<div id="static-sites-and-dokploy-code-1" class="codeblock-wrapper"><doc-codeblock>
-<pre translate="no" class="language-yaml"><code v-pre class="language-yaml">- name: Install Retype CLI
-  run: npm install -g retypeapp
-
-- name: Build site
-  run: retype build</code></pre>
-</doc-codeblock></div>
-<p>The generated output is published to a dedicated branch and Dokploy serves that static artifact through Nginx.</p>
-<p>One failure mode was accidentally deploying the source branch instead of the generated branch. The container then contained files such as <code translate="no" v-pre>retype.yml</code> and Markdown sources but no generated <code translate="no" v-pre>index.html</code>; Nginx consequently served its default welcome page.</p>
-<p>When debugging a static deployment, inspect what Nginx is actually serving:</p>
-<div id="static-sites-and-dokploy-code-2" class="codeblock-wrapper"><doc-codeblock>
-<pre translate="no" class="language-bash"><code v-pre class="language-bash">docker exec &lt;container&gt; ls -lah /usr/share/nginx/html
-docker exec &lt;container&gt; head -20 /usr/share/nginx/html/index.html</code></pre>
-</doc-codeblock></div>
-<hr>
-<h2 id="useful-recovery-checklist">Useful recovery checklist</h2>
-<p>When a public application stops working, I now check layers in this order:</p>
-<ol>
-<li>Is the application/container running?</li>
-<li>Can Traefik reach the service on its actual container port?</li>
-<li>Does <code translate="no" v-pre>curl -H &quot;Host: ...&quot;</code> against localhost return the application?</li>
-<li>Does the Cloudflare ingress rule match the hostname?</li>
-<li>Is <code translate="no" v-pre>cloudflared</code> running?</li>
-<li>Does public DNS point to the tunnel?</li>
-</ol>
-<p>Commands I use frequently:</p>
-<div id="useful-recovery-checklist-code-1" class="codeblock-wrapper"><doc-codeblock>
-<pre translate="no" class="language-bash"><code v-pre class="language-bash">docker ps
-docker service ls
-docker network ls
-
-sudo systemctl status cloudflared --no-pager
-journalctl -u cloudflared -n 100 --no-pager
-
-cloudflared tunnel --config /etc/cloudflared/config.yml ingress validate
-
-curl -I -H &quot;Host: app.example.com&quot; http://127.0.0.1/
-curl -I https://app.example.com</code></pre>
-</doc-codeblock></div>
-<p>This hop-by-hop approach is considerably more useful than repeatedly redeploying a healthy container.</p>
-<hr>
-<h2 id="the-rule-i-keep">The rule I keep</h2>
-<p>The architecture can be summarized in one sentence:</p>
-<blockquote>
-<p><strong>Expose workloads, not the control plane.</strong></p>
-</blockquote>
-<p>Cloudflare Tunnel handles things that are supposed to be public. Tailscale handles things that are supposed to be mine.</p>
-<p>Dokploy and Traefik sit between those worlds, but they do not require the same exposure.</p>
+<p>That is much more interesting to me than simply running an LLM on a server.</p>
+<p>The model is replaceable. The durable part is the surrounding system: repositories, permissions, tools, deployment pipeline, networking and telemetry.</p>
+<p>It also keeps a clear boundary between <strong>development autonomy</strong> and <strong>production authority</strong>. Agents can be productive inside projects while GitHub and Dokploy remain the normal route to deployment.</p>
 
                 
                 <!-- Required only on API pages -->
@@ -342,23 +364,16 @@ curl -I https://app.example.com</code></pre>
             
                 <nav id="retype-nextprev" class="print:hidden flex mt-14">
                     <div class="w-1/2">
-                        <a class="px-5 py-4 h-full flex items-center break-normal font-medium text-body-link border border-base-border hover:border-base-border-hover rounded-l-lg transition-colors duration-150 relative hover:z-5" href="../../../articles/homelab/homelab-architecture/">
+                        <a class="px-5 py-4 h-full flex items-center break-normal font-medium text-body-link border border-base-border hover:border-base-border-hover rounded-r rounded-l-lg transition-colors duration-150 relative hover:z-5" href="../../../articles/homelab/networking-and-exposure/">
                             <svg xmlns="http://www.w3.org/2000/svg" class="mr-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19 11H7.41l5.29-5.29a.996.996 0 10-1.41-1.41l-7 7a1 1 0 000 1.42l7 7a1.024 1.024 0 001.42-.01.996.996 0 000-1.41L7.41 13H19c.55 0 1-.45 1-1s-.45-1-1-1z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
                             <span>
                                 <span class="block text-xs font-normal text-base-text-muted">Previous</span>
-                                <span class="block mt-1">Building a private-​first homelab for apps and AI agents</span>
+                                <span class="block mt-1">Public apps, private control plane: networking a Dokploy homelab</span>
                             </span>
                         </a>
                     </div>
             
                     <div class="w-1/2">
-                        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-normal font-medium text-body-link border border-base-border hover:border-base-border-hover rounded-r-lg transition-colors duration-150 relative hover:z-5" href="../../../articles/homelab/agentic-development/">
-                            <span>
-                                <span class="block text-xs font-normal text-right text-base-text-muted">Next</span>
-                                <span class="block mt-1">Turning my homelab into an AI development environment</span>
-                            </span>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="ml-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19.92 12.38a1 1 0 00-.22-1.09l-7-7a.996.996 0 10-1.41 1.41l5.3 5.3H5c-.55 0-1 .45-1 1s.45 1 1 1h11.59l-5.29 5.29a.996.996 0 000 1.41c.19.2.44.3.7.3s.51-.1.71-.29l7-7c.09-.09.16-.21.21-.33z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
-                        </a>
                     </div>
                 </nav>
             </footer>
@@ -399,6 +414,6 @@ curl -I https://app.example.com</code></pre>
 
     <div id="retype-overlay-target"></div>
 
-        <script data-cfasync="false">window.__DOCS__ = { "title": "Public apps, private control plane: networking a Dokploy homelab", level: 3, icon: "file", hasPrism: true, hasInstagram: false, hasMermaid: false, hasMath: false, tocDepth: 23, "md": "/articles/homelab/networking-and-exposure.md" }</script>
+        <script data-cfasync="false">window.__DOCS__ = { "title": "Turning my homelab into an AI development environment", level: 3, icon: "file", hasPrism: true, hasInstagram: false, hasMermaid: false, hasMath: false, tocDepth: 23, "md": "/articles/homelab/agentic-development.md" }</script>
 </body>
 </html>

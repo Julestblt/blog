@@ -1,0 +1,20 @@
+﻿# Welcome
+
+> This space is where I share thoughts, tips, and notes about cybersecurity, development, and other tech stuff.
+
+- [Welcome](https://blog.julez.cat/index.md): Welcome
+
+## Articles
+
+### DevSecOps
+
+- [Commits signing](https://blog.julez.cat/articles/devsecops/commits-signing.md): Git allows anyone to set any name and email on a commit. This makes it trivial for an attacker to impersonate another contributor in the Git history.
+- [What is DevSecOps ?](https://blog.julez.cat/articles/devsecops/devsecops-definition.md): TL;DR – DevSecOps integrates security from the first line of code through production operations, using collaboration and automation to make security everyone’s job and deliver software both fast and safe.
+
+### Dorking
+
+- [Google Dorking Guide](https://blog.julez.cat/articles/dorking/google-dorking.md): Google Dorking is legal as long as you're only passively viewing public search results.
+
+### Homelab
+
+- [Building a private-first homelab for apps and AI agents](https://blog.julez.cat/articles/homelab/homelab-architecture.md): TL;DR — My homelab is a small Debian server that runs my applications, deployment platform and AI development tooling. Public applications enter through

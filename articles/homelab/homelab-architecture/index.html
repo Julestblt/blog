@@ -10,30 +10,30 @@
     <meta name="generator" content="Retype 4.6.0">
 
     <!-- Primary Meta Tags -->
-    <title>Google Dorking Guide</title>
-    <meta name="title" content="Google Dorking Guide">
-    <meta name="description" content="Google Dorking is legal as long as you're only passively viewing public search results.">
+    <title>Building a private-first homelab for apps and AI agents</title>
+    <meta name="title" content="Building a private-first homelab for apps and AI agents">
+    <meta name="description" content="TL;DR — My homelab is a small Debian server that runs my applications, deployment platform and AI development tooling. Public applications enter through">
 
     <!-- Canonical -->
-    <link rel="canonical" href="https://blog.julez.cat/articles/dorking/google-dorking/">
+    <link rel="canonical" href="https://blog.julez.cat/articles/homelab/homelab-architecture/">
     <link rel="sitemap" type="application/xml" title="Sitemap" href="https://blog.julez.cat/sitemap.xml">
 
     <!-- Open Graph -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://blog.julez.cat/articles/dorking/google-dorking/">
-    <meta property="og:title" content="Google Dorking Guide">
-    <meta property="og:description" content="Google Dorking is legal as long as you're only passively viewing public search results.">
+    <meta property="og:url" content="https://blog.julez.cat/articles/homelab/homelab-architecture/">
+    <meta property="og:title" content="Building a private-first homelab for apps and AI agents">
+    <meta property="og:description" content="TL;DR — My homelab is a small Debian server that runs my applications, deployment platform and AI development tooling. Public applications enter through">
     <meta property="og:site_name" content="JuleZ">
     <meta property="og:locale" content="en_US">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://blog.julez.cat/articles/dorking/google-dorking/">
-    <meta name="twitter:title" content="Google Dorking Guide">
-    <meta name="twitter:description" content="Google Dorking is legal as long as you're only passively viewing public search results.">
+    <meta name="twitter:url" content="https://blog.julez.cat/articles/homelab/homelab-architecture/">
+    <meta name="twitter:title" content="Building a private-first homelab for apps and AI agents">
+    <meta name="twitter:description" content="TL;DR — My homelab is a small Debian server that runs my applications, deployment platform and AI development tooling. Public applications enter through">
 
     <!-- Alternate Markdown -->
-    <link rel="alternate" type="text/markdown" href="https://blog.julez.cat/articles/dorking/google-dorking.md">
+    <link rel="alternate" type="text/markdown" href="https://blog.julez.cat/articles/homelab/homelab-architecture.md">
 
     <script data-cfasync="false">(function(){var cl=document.documentElement.classList,ls=localStorage.getItem("retype_scheme"),hd=cl.contains("dark"),hl=cl.contains("light"),wm=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;if(ls==="dark"||(!ls&&wm&&!hd&&!hl)){cl.remove("light");cl.add("dark")}else if(ls==="light"||(!ls&&!wm&&!hd&&!hl)){cl.remove("dark");cl.add("light")}})();</script>
 
@@ -43,6 +43,7 @@
     <script data-cfasync="false" src="../../../resources/js/config.js?v=4.6.0.843251896631" data-turbo-eval="false" defer></script>
     <script data-cfasync="false" src="../../../resources/js/retype.js?v=4.6.0" data-turbo-eval="false" defer></script>
     <script id="lunr-js" data-cfasync="false" src="../../../resources/js/lunr.js?v=4.6.0.843251896631" data-turbo-eval="false" defer></script>
+    <script id="prism-js" data-cfasync="false" src="../../../resources/js/prism.js?v=4.6.0.843251896631" defer></script>
 </head>
 <body>
     <div id="retype-app" class="relative text-base antialiased text-base-text bg-base-bg font-body">
@@ -154,166 +155,192 @@
                 <doc-page-actions></doc-page-actions>
 
                 <!-- Page content  -->
-<h1 id="google-dorking-guide">Google Dorking Guide</h1>
-<h2 id="-legal-notice"><span class="docs-emoji">&#x26A0;&#xFE0F;</span> Legal Notice</h2>
+<h1 id="building-a-private-first-homelab-for-apps-and-ai-agents">Building a private-first homelab for apps and AI agents</h1>
 <blockquote>
-<p><strong>Google Dorking is legal as long as you&#x27;re only passively viewing public search results.</strong></p>
+<p><strong>TL;DR</strong> — My homelab is a small Debian server that runs my applications, deployment platform and AI development tooling. Public applications enter through Cloudflare Tunnel, administration stays behind Tailscale, Dokploy manages deployments, and a separate agent layer gives Codex and Hermes controlled access to shared projects.</p>
 </blockquote>
-<p>However:</p>
-<ul>
-<li>Accessing, exploiting, or modifying resources <strong>without permission is illegal</strong></li>
-<li>Always use it within a <strong>bug bounty</strong>, <strong>authorized pentest</strong>, or <strong>your own infrastructure</strong></li>
-</ul>
 <hr>
-<p><strong>Google Dorking</strong>, also known as <em>Google Hacking</em>, is the practice of using advanced search operators on Google to extract specific or sensitive information from public web resources.</p>
-<p>This technique can reveal:</p>
+<h2 id="why-i-built-it">Why I built it</h2>
+<p>I originally hosted most of my projects on managed platforms. That is convenient, but I wanted a machine I could fully control: deployments, networking, observability, development agents and the boring operational details that managed platforms normally hide.</p>
+<p>The result is a small homelab built around a Lenovo ThinkCentre running Debian 13. It is not intended to reproduce a cloud provider at home. The goal is simpler:</p>
 <ul>
-<li>Exposed confidential files</li>
-<li>Public admin interfaces</li>
-<li>Leaked credentials</li>
-<li>Misconfigured servers</li>
+<li>host my own applications;</li>
+<li>keep administration private;</li>
+<li>expose only what actually needs to be public;</li>
+<li>make deployments reproducible;</li>
+<li>give AI agents a useful development environment without giving them an unstructured view of the whole server;</li>
+<li>centralize operational and AI usage metrics.</li>
 </ul>
-<h2 id="why-is-google-dorking-powerful">Why is Google Dorking powerful?</h2>
-<p>Because <strong>Google indexes everything</strong> it can access: PDFs, logs, databases, admin panels, backups… If it&#x27;s public, it can be found.</p>
-<p>For example:</p>
-<div id="why-is-google-dorking-powerful-code-1" class="codeblock-wrapper"><doc-codeblock>
-<pre translate="no" class="language-none"><code v-pre class="language-none">intitle:&quot;index of&quot; &quot;backup.zip&quot;</code></pre>
-</doc-codeblock></div>
-<p>This will look for directory listings containing a file named <code translate="no" v-pre>backup.zip</code>.</p>
-<h2 id="key-google-operators">Key Google Operators</h2>
-<retype-table copy-text="| Operator    | Description                     | Example                     |
-| ----------- | ------------------------------- | --------------------------- |
-| `site:`     | Search within a specific domain | `site:example.com login`    |
-| `inurl:`    | Search within the URL           | `inurl:admin`               |
-| `intitle:`  | Search in the page title        | `intitle:&quot;index of&quot;`        |
-| `filetype:` | Search for specific file types  | `filetype:pdf confidential` |
-| `intext:`   | Search in the body text         | `intext:&quot;password&quot;`         |
-| `ext:`      | Same as `filetype:`             | `ext:sql`                   |
-| `-`         | Exclude a term                  | `login -github`             |
-| `&quot;`         | Exact match                     | `&quot;DB_PASSWORD&quot;`             |">
-<div class="table-wrapper scrollbar overflow-hidden">
-<table class="comfortable">
-<thead>
-<tr>
-<th>Operator</th>
-<th>Description</th>
-<th>Example</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code translate="no" v-pre>site:</code></td>
-<td>Search within a specific domain</td>
-<td><code translate="no" v-pre>site:example.com login</code></td>
-</tr>
-<tr>
-<td><code translate="no" v-pre>inurl:</code></td>
-<td>Search within the URL</td>
-<td><code translate="no" v-pre>inurl:admin</code></td>
-</tr>
-<tr>
-<td><code translate="no" v-pre>intitle:</code></td>
-<td>Search in the page title</td>
-<td><code translate="no" v-pre>intitle:&quot;index of&quot;</code></td>
-</tr>
-<tr>
-<td><code translate="no" v-pre>filetype:</code></td>
-<td>Search for specific file types</td>
-<td><code translate="no" v-pre>filetype:pdf confidential</code></td>
-</tr>
-<tr>
-<td><code translate="no" v-pre>intext:</code></td>
-<td>Search in the body text</td>
-<td><code translate="no" v-pre>intext:&quot;password&quot;</code></td>
-</tr>
-<tr>
-<td><code translate="no" v-pre>ext:</code></td>
-<td>Same as <code translate="no" v-pre>filetype:</code></td>
-<td><code translate="no" v-pre>ext:sql</code></td>
-</tr>
-<tr>
-<td><code translate="no" v-pre>-</code></td>
-<td>Exclude a term</td>
-<td><code translate="no" v-pre>login -github</code></td>
-</tr>
-<tr>
-<td><code translate="no" v-pre>&quot;</code></td>
-<td>Exact match</td>
-<td><code translate="no" v-pre>&quot;DB_PASSWORD&quot;</code></td>
-</tr>
-</tbody>
-</table>
-</div>
-</retype-table>
-<h2 id="real-world-dork-examples">Real-world Dork Examples</h2>
-<ul>
-<li><strong>Exposed environment files:</strong></li>
-</ul>
-<div id="real-world-dork-examples-code-1" class="codeblock-wrapper"><doc-codeblock>
-<pre translate="no" class="language-none"><code v-pre class="language-none">filetype:env &quot;DB_PASSWORD&quot;</code></pre>
-</doc-codeblock></div>
-<ul>
-<li><strong>Admin interfaces:</strong></li>
-</ul>
-<div id="real-world-dork-examples-code-2" class="codeblock-wrapper"><doc-codeblock>
-<pre translate="no" class="language-none"><code v-pre class="language-none">intitle:&quot;login&quot; inurl:admin</code></pre>
-</doc-codeblock></div>
-<ul>
-<li><strong>Open directories:</strong></li>
-</ul>
-<div id="real-world-dork-examples-code-3" class="codeblock-wrapper"><doc-codeblock>
-<pre translate="no" class="language-none"><code v-pre class="language-none">intitle:&quot;index of&quot; &quot;backup&quot;</code></pre>
-</doc-codeblock></div>
-<ul>
-<li><strong>Public logs:</strong></li>
-</ul>
-<div id="real-world-dork-examples-code-4" class="codeblock-wrapper"><doc-codeblock>
-<pre translate="no" class="language-none"><code v-pre class="language-none">ext:log site:example.com</code></pre>
-</doc-codeblock></div>
+<p>The interesting part ended up being less Docker itself and more the boundaries between <strong>public traffic, private administration, deployment automation and autonomous agents</strong>.</p>
 <hr>
-<h2 id="use-my-tool">Use my tool</h2>
-<p>To make dorking easier and more accessible, I built a tool: <a href="https://dork.julez.cat"><strong>dork.julez.cat</strong></a></p>
-<p>The code is open-source and available on <a href="https://github.com/Julestblt/dork-generator">GitHub</a></p>
-<h3 id="features">Features:</h3>
-<ul>
-<li>Pre-built dorks presets</li>
-<li>Instant query preview</li>
-<li>Search by filetype, keywords, and domain</li>
-<li>Easy copy &amp; paste</li>
-<li>No login, no tracking</li>
-</ul>
-<h2 id="defensive-measures">Defensive Measures</h2>
-<p>If you maintain a website, here’s how to reduce your exposure:</p>
-<ul>
-<li>Block indexing via <code translate="no" v-pre>robots.txt</code>:</li>
-</ul>
-<div id="defensive-measures-code-1" class="codeblock-wrapper"><doc-codeblock>
-<pre translate="no" class="language-none"><code v-pre class="language-none">User-agent: *
-Disallow: /admin/
-Disallow: /config/
-Disallow: /backup/</code></pre>
+<h2 id="architecture-at-a-glance">Architecture at a glance</h2>
+<p>The platform can be thought of as four layers.</p>
+<h3 id="public-delivery">Public delivery</h3>
+<p>Public applications such as my portfolio, Veloce and this Retype blog are deployed by Dokploy and routed internally by Traefik.</p>
+<p>I do <strong>not</strong> rely on inbound port forwarding from my router. A Cloudflare Tunnel initiated by the server provides the public path:</p>
+<div id="public-delivery-code-1" class="codeblock-wrapper"><doc-codeblock>
+<pre translate="no" class="language-none"><code v-pre class="language-none">Internet
+   |
+Cloudflare DNS / HTTPS
+   |
+Cloudflare Tunnel
+   |
+cloudflared
+   |
+Traefik
+   |
+Application containers</code></pre>
 </doc-codeblock></div>
-<blockquote>
-<p><span class="docs-emoji">&#x26A0;&#xFE0F;</span> <strong>Note:</strong> While <code translate="no" v-pre>robots.txt</code> tells search engines not to index certain paths, it is publicly accessible and can unintentionally expose the structure of your site.<br />
-For example, listing <code translate="no" v-pre>/backup/</code> or <code translate="no" v-pre>/admin/</code> in <code translate="no" v-pre>robots.txt</code> may reveal sensitive directories to attackers.<br />
-Avoid disclosing private paths unless strictly necessary, and always combine this with proper access controls (e.g., authentication, IP filtering).</p>
-</blockquote>
-<ul>
-<li>Never store sensitive credentials in publicly accessible files</li>
-<li>Protect internal folders with strong authentication</li>
-<li>Regularly audit your domain using your own dorks</li>
-</ul>
+<p>Cloudflare terminates the public side while <code translate="no" v-pre>cloudflared</code> maintains an outbound tunnel from the homelab. Traefik still performs application routing using the requested hostname.</p>
+<h3 id="private-administration">Private administration</h3>
+<p>The control plane is deliberately different:</p>
+<div id="private-administration-code-1" class="codeblock-wrapper"><doc-codeblock>
+<pre translate="no" class="language-none"><code v-pre class="language-none">Laptop
+   |
+Tailscale
+   |
+   +-- SSH
+   |
+   +-- Dokploy dashboard</code></pre>
+</doc-codeblock></div>
+<p>Dokploy does not need to be an Internet-facing administration panel. SSH does not either. Both are reachable through my tailnet.</p>
+<p>This distinction — <strong>public data plane, private control plane</strong> — is one of the most important decisions in the setup.</p>
+<h3 id="deployment">Deployment</h3>
+<p>GitHub remains the source of truth for application code. Dokploy pulls and deploys projects, while a narrowly exposed webhook endpoint allows GitHub to trigger deployments.</p>
+<p>For this blog, Retype is built by GitHub Actions and the generated static site is published to a dedicated branch. Dokploy serves that output with Nginx.</p>
+<h3 id="ai-development">AI development</h3>
+<p>The server is also becoming an agentic development environment.</p>
+<p>Codex is my interactive development agent, while Hermes is used for more autonomous tasks. OpenCode Go can act as a model provider. Both agents work against a shared project area under:</p>
+<div id="ai-development-code-1" class="codeblock-wrapper"><doc-codeblock>
+<pre translate="no" class="language-none"><code v-pre class="language-none">/srv/projects</code></pre>
+</doc-codeblock></div>
+<p>The idea is that an agent can enter a project, inspect it, edit files, run commands and tests, then commit and push through Git rather than manipulating deployed containers directly.</p>
+<p>A custom gateway provides a common surface for Hermes and for observability data such as server metrics and AI usage.</p>
 <hr>
-<h2 id="-conclusion"><span class="docs-emoji">&#x1F4CC;</span> Conclusion</h2>
-<p><strong>Google Dorking is a powerful recon technique</strong> for both red teamers and defenders.</p>
-<p>It allows you to:</p>
-<ul>
-<li>Uncover misconfigurations,</li>
-<li>Reveal exposed assets,</li>
-<li>Audit your own infrastructure.</li>
-</ul>
-<p>Always <strong>stay ethical and legal</strong>.</p>
+<h2 id="why-srvprojects-matters">Why <code translate="no" v-pre>/srv/projects</code> matters</h2>
+<p>Giving agents arbitrary access to a server is easy. Giving them a <strong>useful boundary</strong> is more interesting.</p>
+<p>I use <code translate="no" v-pre>/srv/projects</code> as the workspace containing repositories agents are allowed to operate on:</p>
+<div id="why-srvprojects-matters-code-1" class="codeblock-wrapper"><doc-codeblock>
+<pre translate="no" class="language-none"><code v-pre class="language-none">/srv/projects/
+├── project-a/
+├── project-b/
+└── ...</code></pre>
+</doc-codeblock></div>
+<p>A typical workflow becomes:</p>
+<div id="why-srvprojects-matters-code-2" class="codeblock-wrapper"><doc-codeblock>
+<pre translate="no" class="language-none"><code v-pre class="language-none">Task
+  -&gt; Codex or Hermes
+  -&gt; /srv/projects/&lt;repository&gt;
+  -&gt; edit / test / build
+  -&gt; git commit
+  -&gt; git push
+  -&gt; GitHub
+  -&gt; Dokploy deployment</code></pre>
+</doc-codeblock></div>
+<p>This also makes the Git repository the hand-off point between development automation and production deployment.</p>
+<p>A minimal setup looks like:</p>
+<div id="why-srvprojects-matters-code-3" class="codeblock-wrapper"><doc-codeblock>
+<pre translate="no" class="language-bash"><code v-pre class="language-bash">sudo mkdir -p /srv/projects
+sudo chown -R &lt;agent-user&gt;:&lt;agent-group&gt; /srv/projects
+sudo chmod 750 /srv/projects
+
+cd /srv/projects
+git clone git@github.com:&lt;owner&gt;/&lt;repository&gt;.git</code></pre>
+</doc-codeblock></div>
+<p>The exact permissions should be adapted to the users running the agents. I prefer granting access to this workspace explicitly instead of making the agent user broadly privileged.</p>
 <hr>
+<h2 id="the-custom-gateway">The custom gateway</h2>
+<p>I wanted one API surface instead of several unrelated local endpoints.</p>
+<p>The gateway aggregates:</p>
+<ul>
+<li>access to Hermes;</li>
+<li>server health and resource metrics;</li>
+<li>Codex usage/activity;</li>
+<li>OpenCode model/token usage;</li>
+<li>agent status and related telemetry.</li>
+</ul>
+<p>Conceptually:</p>
+<div id="the-custom-gateway-code-1" class="codeblock-wrapper"><doc-codeblock>
+<pre translate="no" class="language-none"><code v-pre class="language-none">Server metrics ----+
+Codex usage -------+
+OpenCode usage ----+--&gt; Custom Gateway --&gt; client/dashboard
+Hermes ------------+</code></pre>
+</doc-codeblock></div>
+<p>This makes it possible to build a single dashboard without coupling the frontend to the implementation details of every tool.</p>
+<p>The gateway itself is treated as infrastructure. Authentication and exposure are separate concerns from the applications it fronts; an endpoint existing locally does not imply it should be reachable from the public Internet.</p>
+<hr>
+<h2 id="rebuilding-the-core">Rebuilding the core</h2>
+<p>This is not a complete bootstrap script, but these are the main pieces I would need after a clean Debian installation.</p>
+<h3 id="docker">Docker</h3>
+<div id="docker-code-1" class="codeblock-wrapper"><doc-codeblock>
+<pre translate="no" class="language-bash"><code v-pre class="language-bash">sudo apt update
+sudo apt install -y ca-certificates curl git
+curl -fsSL https://get.docker.com | sudo sh
+sudo usermod -aG docker &quot;$USER&quot;</code></pre>
+</doc-codeblock></div>
+<p>Log out and back in before using the Docker group.</p>
+<h3 id="tailscale">Tailscale</h3>
+<p>Install Tailscale using its current Debian instructions, authenticate the machine, then verify:</p>
+<div id="tailscale-code-1" class="codeblock-wrapper"><doc-codeblock>
+<pre translate="no" class="language-bash"><code v-pre class="language-bash">tailscale status
+tailscale ip</code></pre>
+</doc-codeblock></div>
+<p>The important design decision is not the install command: it is that administrative services are addressed through Tailscale rather than opened on the router.</p>
+<h3 id="cloudflare-tunnel">Cloudflare Tunnel</h3>
+<p>After installing <code translate="no" v-pre>cloudflared</code>, create/login to a tunnel and keep its configuration in a root-controlled location such as:</p>
+<div id="cloudflare-tunnel-code-1" class="codeblock-wrapper"><doc-codeblock>
+<pre translate="no" class="language-none"><code v-pre class="language-none">/etc/cloudflared/config.yml</code></pre>
+</doc-codeblock></div>
+<p>A simplified ingress configuration looks like:</p>
+<div id="cloudflare-tunnel-code-2" class="codeblock-wrapper"><doc-codeblock>
+<pre translate="no" class="language-yaml"><code v-pre class="language-yaml">ingress:
+  - hostname: app.example.com
+    service: http://127.0.0.1:80
+    originRequest:
+      httpHostHeader: app.example.com
+
+  - hostname: blog.example.com
+    service: http://127.0.0.1:80
+    originRequest:
+      httpHostHeader: blog.example.com
+
+  - service: http_status:404</code></pre>
+</doc-codeblock></div>
+<p>Validate before restarting:</p>
+<div id="cloudflare-tunnel-code-3" class="codeblock-wrapper"><doc-codeblock>
+<pre translate="no" class="language-bash"><code v-pre class="language-bash">cloudflared tunnel --config /etc/cloudflared/config.yml ingress validate
+sudo systemctl restart cloudflared
+sudo systemctl status cloudflared --no-pager</code></pre>
+</doc-codeblock></div>
+<p>The final catch-all is intentional: an unknown hostname should not accidentally expose another local service.</p>
+<h3 id="dokploy-and-traefik">Dokploy and Traefik</h3>
+<p>Dokploy manages the application lifecycle while Traefik is the reverse proxy used for hostname routing.</p>
+<p>Useful checks:</p>
+<div id="dokploy-and-traefik-code-1" class="codeblock-wrapper"><doc-codeblock>
+<pre translate="no" class="language-bash"><code v-pre class="language-bash">docker ps
+docker service ls
+docker network ls</code></pre>
+</doc-codeblock></div>
+<p>To test a Traefik route without depending on external DNS:</p>
+<div id="dokploy-and-traefik-code-2" class="codeblock-wrapper"><doc-codeblock>
+<pre translate="no" class="language-bash"><code v-pre class="language-bash">curl -I -H &quot;Host: app.example.com&quot; http://127.0.0.1/</code></pre>
+</doc-codeblock></div>
+<p>That command became one of the most useful debugging tools in the whole setup.</p>
+<hr>
+<h2 id="what-i-learned">What I learned</h2>
+<p>The hardest problems were rarely &quot;is the container running?&quot;. They were usually about <strong>which layer owned the failure</strong>.</p>
+<p>A request can cross DNS, Cloudflare, a tunnel, Traefik, a Docker network and finally an application. Debugging became much easier once I started validating the path one hop at a time.</p>
+<p>The other major lesson was exposure. Installing a dashboard is trivial. Deciding whether that dashboard should be publicly routable is an architecture decision.</p>
+<p>My current rule is straightforward:</p>
+<p><strong>applications may be public; administration is private by default.</strong></p>
+<p>That rule shaped the rest of the homelab, including how GitHub webhooks and AI agents are integrated.</p>
+<hr>
+<h2 id="next">Next</h2>
+<p>The next articles go deeper into two parts of this setup:</p>
+<ul>
+<li>how I combined Cloudflare Tunnel, Tailscale, Traefik and Dokploy without exposing the control plane;</li>
+<li>how Codex, Hermes, OpenCode Go and <code translate="no" v-pre>/srv/projects</code> turn the same machine into an agentic development environment.</li>
+</ul>
 
                 
                 <!-- Required only on API pages -->
@@ -323,23 +350,16 @@ Avoid disclosing private paths unless strictly necessary, and always combine thi
             
                 <nav id="retype-nextprev" class="print:hidden flex mt-14">
                     <div class="w-1/2">
-                        <a class="px-5 py-4 h-full flex items-center break-normal font-medium text-body-link border border-base-border hover:border-base-border-hover rounded-l-lg transition-colors duration-150 relative hover:z-5" href="../../../articles/devsecops/devsecops-definition/">
+                        <a class="px-5 py-4 h-full flex items-center break-normal font-medium text-body-link border border-base-border hover:border-base-border-hover rounded-r rounded-l-lg transition-colors duration-150 relative hover:z-5" href="../../../articles/dorking/google-dorking/">
                             <svg xmlns="http://www.w3.org/2000/svg" class="mr-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19 11H7.41l5.29-5.29a.996.996 0 10-1.41-1.41l-7 7a1 1 0 000 1.42l7 7a1.024 1.024 0 001.42-.01.996.996 0 000-1.41L7.41 13H19c.55 0 1-.45 1-1s-.45-1-1-1z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
                             <span>
                                 <span class="block text-xs font-normal text-base-text-muted">Previous</span>
-                                <span class="block mt-1">What is Dev​Sec​Ops ?</span>
+                                <span class="block mt-1">Google Dorking Guide</span>
                             </span>
                         </a>
                     </div>
             
                     <div class="w-1/2">
-                        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-normal font-medium text-body-link border border-base-border hover:border-base-border-hover rounded-r-lg transition-colors duration-150 relative hover:z-5" href="../../../articles/homelab/homelab-architecture/">
-                            <span>
-                                <span class="block text-xs font-normal text-right text-base-text-muted">Next</span>
-                                <span class="block mt-1">Building a private-​first homelab for apps and AI agents</span>
-                            </span>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="ml-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19.92 12.38a1 1 0 00-.22-1.09l-7-7a.996.996 0 10-1.41 1.41l5.3 5.3H5c-.55 0-1 .45-1 1s.45 1 1 1h11.59l-5.29 5.29a.996.996 0 000 1.41c.19.2.44.3.7.3s.51-.1.71-.29l7-7c.09-.09.16-.21.21-.33z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
-                        </a>
                     </div>
                 </nav>
             </footer>
@@ -380,6 +400,6 @@ Avoid disclosing private paths unless strictly necessary, and always combine thi
 
     <div id="retype-overlay-target"></div>
 
-        <script data-cfasync="false">window.__DOCS__ = { "title": "Google Dorking Guide", level: 3, icon: "file", hasPrism: false, hasInstagram: false, hasMermaid: false, hasMath: false, tocDepth: 23, "md": "/articles/dorking/google-dorking.md" }</script>
+        <script data-cfasync="false">window.__DOCS__ = { "title": "Building a private-first homelab for apps and AI agents", level: 3, icon: "file", hasPrism: true, hasInstagram: false, hasMermaid: false, hasMath: false, tocDepth: 23, "md": "/articles/homelab/homelab-architecture.md" }</script>
 </body>
 </html>

@@ -18,3 +18,5 @@
 ### Homelab
 
 - [Building a private-first homelab for apps and AI agents](https://blog.julez.cat/articles/homelab/homelab-architecture.md): TL;DR — My homelab is a small Debian server that runs my applications, deployment platform and AI development tooling. Public applications enter through
+- [Public apps, private control plane: networking a Dokploy homelab](https://blog.julez.cat/articles/homelab/networking-and-exposure.md): Running an application at home is easy until it has to be reachable from the Internet.
+- [Turning my homelab into an AI development environment](https://blog.julez.cat/articles/homelab/agentic-development.md): My homelab started as a place to deploy applications. It gradually became something more interesting: a development environment where AI agents can work on real repositories, run tools and ship changes through the same Git workflow I use manually.

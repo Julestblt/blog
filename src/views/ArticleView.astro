@@ -18,7 +18,7 @@ const { Content, headings } = await render(article.entry);
 
 <BaseLayout title={article.title} description={article.description} type="article" markdownUrl={article.markdownUrl} publishedAt={article.date}>
   <SiteHeader variant="page" />
-  <article class="mt-12 flex flex-col gap-5 text-lg leading-[1.68] sm:mt-20 sm:gap-6 sm:text-xl sm:leading-[1.7]">
+  <article class="mt-12 flex flex-col gap-5 text-[18px] leading-[1.68] sm:mt-20 sm:gap-6 sm:text-[20px] sm:leading-[1.7]">
     <ArticleHeader article={article} />
     <TableOfContents headings={headings} />
     <div class="prose">

@@ -18,13 +18,13 @@ const linkClass = "flex flex-col gap-1 border-t border-line py-4 hover:underline
     <nav aria-label="Series" class="mt-12 flex flex-col border-b border-line text-[17px] sm:mt-16 sm:flex-row sm:justify-between sm:gap-6 sm:border-t sm:border-b-0 sm:pt-[18px]">
       {next && (
         <a href={next.url} class={`${linkClass} sm:order-last sm:ml-auto sm:text-right`}>
-          <span class="text-sm text-fg-3">Next →</span>
+          <span class="text-[14px] text-fg-3">Next →</span>
           {next.title}
         </a>
       )}
       {previous && (
         <a href={previous.url} class={linkClass}>
-          <span class="text-sm text-fg-3">← Previous</span>
+          <span class="text-[14px] text-fg-3">← Previous</span>
           {previous.title}
         </a>
       )}

@@ -19,10 +19,10 @@ const { series } = Astro.props;
         {series.map((item) => (
           <li class="border-b border-line sm:border-0">
             <a href={item.url} class="group flex flex-col gap-1.5 py-[18px] sm:grid sm:grid-cols-[76px_minmax(0,1fr)] sm:items-baseline sm:gap-4 sm:py-4">
-              <span class="text-sm text-fg-3 sm:text-[15px]">{pluralize(item.articles.length, "part")}</span>
+              <span class="text-[14px] text-fg-3 sm:text-[15px]">{pluralize(item.articles.length, "part")}</span>
               <span class="flex flex-col gap-1.5 sm:gap-1">
-                <span class="text-xl font-semibold group-hover:underline-subtle">{item.title}</span>
-                <span class="text-base text-fg-2">{item.description}</span>
+                <span class="text-[20px] font-semibold group-hover:underline-subtle">{item.title}</span>
+                <span class="text-[16px] text-fg-2">{item.description}</span>
               </span>
             </a>
           </li>

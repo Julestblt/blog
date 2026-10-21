@@ -26,13 +26,13 @@ const years = groupByYear(articles);
           {yearArticles.map((article) => (
             <li class="border-b border-line sm:border-0">
               <a href={article.url} class="group flex flex-col gap-1.5 py-[18px] sm:grid sm:grid-cols-[76px_minmax(0,1fr)] sm:items-baseline sm:gap-4 sm:py-3">
-                <time datetime={formatIsoDate(article.date)} class="text-sm text-fg-3 tabular-nums sm:text-[15px]">
+                <time datetime={formatIsoDate(article.date)} class="text-[14px] text-fg-3 tabular-nums sm:text-[15px]">
                   <span class="sm:hidden">{formatDayMonthYear(article.date)}</span>
                   <span class="hidden sm:inline">{formatDayMonth(article.date)}</span>
                 </time>
                 <span class="flex flex-col gap-1.5 sm:gap-1">
-                  <span class="text-xl leading-[1.3] font-semibold group-hover:underline-subtle sm:leading-[1.35]">{article.title}</span>
-                  <span class="text-base leading-normal text-fg-2">{article.description}</span>
+                  <span class="text-[20px] leading-[1.3] font-semibold group-hover:underline-subtle sm:leading-[1.35]">{article.title}</span>
+                  <span class="text-[16px] leading-normal text-fg-2">{article.description}</span>
                 </span>
               </a>
             </li>

@@ -24,7 +24,8 @@ const canonicalUrl = absoluteUrl(Astro.url.pathname);
     <meta name="description" content={description} />
     <meta name="author" content={SITE.author} />
     <link rel="canonical" href={canonicalUrl} />
-    <link rel="icon" href="/favicon.png" type="image/png" />
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="alternate" type="application/rss+xml" title={SITE.author} href="/rss.xml" />
     {markdownUrl && <link rel="alternate" type="text/markdown" href={markdownUrl} />}
     <link rel="sitemap" href="/sitemap-index.xml" />

@@ -16,12 +16,12 @@ const toolClass = "inline-flex min-h-10 items-center text-fg-3 underline-subtle 
 ---
 
 <header class="mb-2 flex flex-col gap-3 sm:mb-4 sm:gap-4">
-  <span class="text-sm text-fg-3 sm:text-[15px]">
+  <span class="text-[14px] text-fg-3 sm:text-[15px]">
     <time datetime={formatIsoDate(article.date)}>{formatFullDate(article.date)}</time> · {minutes} min
     {
       series && (
         <span class="hidden sm:inline">
-          · <a href={series.url} class="underline-subtle">{series.title}, part {part}</a>
+          {" · "}<a href={series.url} class="underline-subtle">{series.title}, part {part}</a>
         </span>
       )
     }
@@ -32,7 +32,7 @@ const toolClass = "inline-flex min-h-10 items-center text-fg-3 underline-subtle 
   <p class="text-[19px] leading-normal text-fg-2 sm:text-[22px] sm:leading-[1.55]">{article.description}</p>
   {
     series && (
-      <span class="text-sm text-fg-3 sm:hidden">
+      <span class="text-[14px] text-fg-3 sm:hidden">
         Part {part} of <a href={series.url} class="underline-subtle">{series.title}</a>
       </span>
     )

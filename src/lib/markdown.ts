@@ -85,3 +85,15 @@ export const imageFigures = defineHastPlugin({
     },
   },
 });
+
+export const scrollableTables = defineHastPlugin({
+  name: "scrollable-tables",
+  element: {
+    filter: ["table"],
+    visit(node, ctx) {
+      ctx.wrapNode(node, {
+        raw: '<div class="table-scroll" role="region" aria-label="Table, scrolls sideways" tabindex="0"></div>',
+      });
+    },
+  },
+});

@@ -12,6 +12,7 @@
   --color-code: #f6f6f6;
   --font-serif: "Source Serif 4 Variable", Georgia, "Times New Roman", serif;
   --font-mono: "JetBrains Mono Variable", ui-monospace, Menlo, monospace;
+  --breakpoint-3xl: 112.5rem;
 }
 
 @layer base {

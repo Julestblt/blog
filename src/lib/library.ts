@@ -130,3 +130,12 @@ export async function getLibrary(): Promise<Library> {
     series: [...series.values()].filter((item) => item.articles.length > 0).sort((a, b) => latestDate(b) - latestDate(a)),
   };
 }
+
+export function groupByYear(articles: Article[]) {
+  const years = new Map<number, Article[]>();
+  for (const article of articles) {
+    const year = article.date.getUTCFullYear();
+    years.set(year, [...(years.get(year) ?? []), article]);
+  }
+  return [...years].map(([year, items]) => ({ year, articles: items }));
+}

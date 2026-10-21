@@ -1,0 +1,33 @@
+---
+import type { Series } from "../lib/library";
+import { pluralize } from "../lib/format";
+
+type Props = {
+  series: Series[];
+};
+
+const { series } = Astro.props;
+---
+
+{
+  series.length > 0 && (
+    <section id="series" aria-labelledby="series-heading" class="mt-12 sm:mt-[72px]">
+      <h2 id="series-heading" class="border-b border-line pb-3 text-[15px] font-semibold tracking-[.02em] sm:pb-3.5">
+        Series
+      </h2>
+      <ul>
+        {series.map((item) => (
+          <li class="border-b border-line sm:border-0">
+            <a href={item.url} class="group flex flex-col gap-1.5 py-[18px] sm:grid sm:grid-cols-[76px_minmax(0,1fr)] sm:items-baseline sm:gap-4 sm:py-4">
+              <span class="text-sm text-fg-3 sm:text-[15px]">{pluralize(item.articles.length, "part")}</span>
+              <span class="flex flex-col gap-1.5 sm:gap-1">
+                <span class="text-xl font-semibold group-hover:underline-subtle">{item.title}</span>
+                <span class="text-base text-fg-2">{item.description}</span>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}

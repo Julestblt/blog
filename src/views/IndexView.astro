@@ -1,0 +1,25 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import ArticleIndex from "../components/ArticleIndex.astro";
+import SeriesIndex from "../components/SeriesIndex.astro";
+import type { Library, Topic } from "../lib/library";
+import { SITE } from "../lib/site";
+
+type Props = {
+  library: Library;
+  activeTopic?: Topic;
+};
+
+const { library, activeTopic } = Astro.props;
+const articles = activeTopic ? library.articles.filter((article) => article.topic === activeTopic) : library.articles;
+const series = activeTopic ? library.series.filter((item) => item.topic === activeTopic) : library.series;
+---
+
+<BaseLayout title={activeTopic?.title} description={activeTopic?.description ?? SITE.description}>
+  <SiteHeader variant="index" />
+  <ArticleIndex articles={articles} topics={library.topics} activeTopic={activeTopic} />
+  <SeriesIndex series={series} />
+  <SiteFooter variant="index" />
+</BaseLayout>

@@ -1,0 +1,44 @@
+---
+import TopicFilter from "./TopicFilter.astro";
+import { groupByYear, type Article, type Topic } from "../lib/library";
+import { formatDayMonth, formatDayMonthYear, formatIsoDate } from "../lib/format";
+
+type Props = {
+  articles: Article[];
+  topics: Topic[];
+  activeTopic?: Topic;
+};
+
+const { articles, topics, activeTopic } = Astro.props;
+const years = groupByYear(articles);
+---
+
+<section id="articles" aria-labelledby="articles-heading" class="mt-10 sm:mt-[72px]">
+  <div class="flex flex-col gap-2.5 border-b border-line pb-3 sm:flex-row sm:flex-wrap sm:items-baseline sm:justify-between sm:gap-x-4 sm:gap-y-2 sm:pb-3.5">
+    <h2 id="articles-heading" class="text-[15px] font-semibold tracking-[.02em]">Articles</h2>
+    <TopicFilter topics={topics} active={activeTopic} />
+  </div>
+  {
+    years.map(({ year, articles: yearArticles }) => (
+      <div class="sm:pt-7">
+        <h3 class="mb-1.5 hidden text-[15px] font-normal text-fg-3 sm:block">{year}</h3>
+        <ol>
+          {yearArticles.map((article) => (
+            <li class="border-b border-line sm:border-0">
+              <a href={article.url} class="group flex flex-col gap-1.5 py-[18px] sm:grid sm:grid-cols-[76px_minmax(0,1fr)] sm:items-baseline sm:gap-4 sm:py-3">
+                <time datetime={formatIsoDate(article.date)} class="text-sm text-fg-3 tabular-nums sm:text-[15px]">
+                  <span class="sm:hidden">{formatDayMonthYear(article.date)}</span>
+                  <span class="hidden sm:inline">{formatDayMonth(article.date)}</span>
+                </time>
+                <span class="flex flex-col gap-1.5 sm:gap-1">
+                  <span class="text-xl leading-[1.3] font-semibold group-hover:underline-subtle sm:leading-[1.35]">{article.title}</span>
+                  <span class="text-base leading-normal text-fg-2">{article.description}</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </div>
+    ))
+  }
+</section>

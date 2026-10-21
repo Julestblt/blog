@@ -35,6 +35,7 @@ date: 2026-10-21
 
 - `/articles/<path>.md`: raw Markdown of each article
 - `/rss.xml`, `/sitemap-index.xml` and `/llms.txt`
+- `/pagefind/`: the search index built by [Pagefind](https://pagefind.app) after `astro build`, used by `/search`
 
 ## Development
 
@@ -44,6 +45,8 @@ Astro needs Node.js 22.22 or later.
 npm install
 npm run dev
 ```
+
+Search only works on a built site: run `npm run build && npm run preview`.
 
 ## Deployment
 

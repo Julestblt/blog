@@ -1,0 +1,45 @@
+---
+import "../styles/global.css";
+import { SITE, absoluteUrl } from "../lib/site";
+
+type Props = {
+  title?: string;
+  description: string;
+  type?: "website" | "article";
+  markdownUrl?: string;
+  publishedAt?: Date;
+};
+
+const { title, description, type = "website", markdownUrl, publishedAt } = Astro.props;
+const fullTitle = title ? `${title} · ${SITE.author}` : SITE.author;
+const canonicalUrl = absoluteUrl(Astro.url.pathname);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={SITE.author} />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="icon" href="/favicon.png" type="image/png" />
+    <link rel="alternate" type="application/rss+xml" title={SITE.author} href="/rss.xml" />
+    {markdownUrl && <link rel="alternate" type="text/markdown" href={markdownUrl} />}
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content={SITE.author} />
+    <meta property="og:title" content={title ?? SITE.author} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:locale" content="en_US" />
+    {publishedAt && <meta property="article:published_time" content={publishedAt.toISOString()} />}
+    <meta name="twitter:card" content="summary" />
+  </head>
+  <body>
+    <div class="mx-auto max-w-[680px] px-5 pt-10 pb-16 [overflow-wrap:anywhere] sm:px-6 sm:pt-[72px] sm:pb-24 sm:[overflow-wrap:normal]">
+      <slot />
+    </div>
+  </body>
+</html>

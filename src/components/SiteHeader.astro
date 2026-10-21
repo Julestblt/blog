@@ -3,27 +3,37 @@ import { SITE } from "../lib/site";
 
 type Props = {
   variant: "index" | "page";
+  current?: "search";
 };
 
-const { variant } = Astro.props;
-const isIndex = variant === "index";
+const { variant, current } = Astro.props;
+const linkClass = "py-2.5 hover:underline-subtle sm:py-0";
 ---
 
 {
-  isIndex ? (
+  variant === "index" ? (
     <header class="flex flex-col gap-3.5 sm:flex-row sm:flex-wrap sm:items-baseline sm:justify-between sm:gap-x-6 sm:gap-y-3">
       <a href="/" class="text-[20px] font-bold tracking-[-0.01em]">{SITE.author}</a>
       <nav aria-label="Main" class="flex flex-wrap gap-x-[18px] text-[16px] text-fg-2 sm:gap-[22px]">
-        <a href="/#articles" class="py-2.5 hover:underline-subtle sm:py-0">Articles</a>
-        <a href="/#series" class="py-2.5 hover:underline-subtle sm:py-0">Series</a>
+        <a href="/#articles" class={linkClass}>Articles</a>
+        <a href="/#series" class={linkClass}>Series</a>
+        <a href="/about" class={linkClass}>About</a>
+        <a
+          href="/search"
+          aria-current={current === "search" ? "page" : undefined}
+          class:list={[linkClass, current === "search" && "text-fg underline-subtle"]}
+        >
+          Search
+        </a>
       </nav>
     </header>
   ) : (
     <header class="flex flex-wrap items-baseline justify-between gap-3 sm:gap-x-6">
       <a href="/" class="text-[18px] font-bold sm:text-[20px] sm:tracking-[-0.01em]">{SITE.author}</a>
       <nav aria-label="Main" class="flex gap-[22px] text-[15px] text-fg-2 sm:text-[16px]">
-        <a href="/#articles" class="py-2.5 hover:underline-subtle sm:py-0">Articles</a>
+        <a href="/#articles" class={linkClass}>Articles</a>
         <a href="/#series" class="hidden hover:underline-subtle sm:inline">Series</a>
+        <a href="/about" class="hidden hover:underline-subtle sm:inline">About</a>
       </nav>
     </header>
   )

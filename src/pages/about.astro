@@ -1,0 +1,45 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import { SITE, displayUrl } from "../lib/site";
+
+const links = [
+  { label: "GitHub", url: SITE.github },
+  { label: "Portfolio", url: SITE.portfolio },
+];
+const linkTextClass = "text-[18px]";
+const rowClass = "flex flex-col gap-1 border-b border-line py-3.5 sm:grid sm:grid-cols-[76px_minmax(0,1fr)] sm:items-baseline sm:gap-4 sm:border-0 sm:py-3";
+const labelClass = "text-[14px] text-fg-3 sm:text-[15px]";
+---
+
+<BaseLayout title="About" description={`About ${SITE.author} and this blog.`}>
+  <SiteHeader variant="page" />
+  <section aria-labelledby="about-title" class="mt-12 flex flex-col gap-5 text-[18px] leading-[1.68] sm:mt-20 sm:gap-6 sm:text-[20px] sm:leading-[1.7]">
+    <h1 id="about-title" class="mb-1 text-[32px] leading-[1.15] font-bold tracking-[-0.02em] sm:mb-2 sm:text-[44px] sm:leading-[1.12]">About</h1>
+    <p>I’m {SITE.author}. I write about security, infrastructure and AI agents, mostly from what I build and run in my own homelab.</p>
+    <p>Articles are grouped by topic, and longer explorations become series. Every article is also available as plain Markdown, to read offline or to hand to an AI assistant.</p>
+  </section>
+  <section aria-labelledby="elsewhere-title" class="mt-12 sm:mt-[72px]">
+    <h2 id="elsewhere-title" class="border-b border-line pb-3 text-[15px] font-semibold tracking-[.02em] sm:pb-3.5">Elsewhere</h2>
+    <ul>
+      {
+        links.map((link) => (
+          <li class={rowClass}>
+            <span class={labelClass}>{link.label}</span>
+            <a href={link.url} class={`${linkTextClass} underline-subtle`}>
+              {displayUrl(link.url)}
+            </a>
+          </li>
+        ))
+      }
+      <li class={rowClass}>
+        <span class={labelClass}>Feeds</span>
+        <span class={linkTextClass}>
+          <a href="/rss.xml" class="underline-subtle">RSS</a>{" · "}<a href="/llms.txt" class="underline-subtle">llms.txt</a>
+        </span>
+      </li>
+    </ul>
+  </section>
+  <SiteFooter variant="page" />
+</BaseLayout>

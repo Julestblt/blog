@@ -7,6 +7,7 @@ import ArticleHeader from "../components/ArticleHeader.astro";
 import TableOfContents from "../components/TableOfContents.astro";
 import SeriesNavigation from "../components/SeriesNavigation.astro";
 import type { Article } from "../lib/library";
+import { formatIsoDate } from "../lib/format";
 
 type Props = {
   article: Article;
@@ -18,7 +19,7 @@ const { Content, headings } = await render(article.entry);
 
 <BaseLayout title={article.title} description={article.description} type="article" markdownUrl={article.markdownUrl} publishedAt={article.date}>
   <SiteHeader variant="page" />
-  <article data-pagefind-body class="mt-12 flex flex-col gap-5 text-[18px] leading-[1.68] sm:mt-20 sm:gap-6 sm:text-[20px] sm:leading-[1.7]">
+  <article data-pagefind-body data-pagefind-meta={`date:${formatIsoDate(article.date)}`} class="mt-12 flex flex-col gap-5 text-[18px] leading-[1.68] sm:mt-20 sm:gap-6 sm:text-[20px] sm:leading-[1.7]">
     <ArticleHeader article={article} />
     <TableOfContents headings={headings} />
     <div class="prose">

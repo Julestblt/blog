@@ -40,9 +40,9 @@ const MAX_DEPTH = 3;
 
 const slugOf = (segment: string) => segment.replace(ORDER_PREFIX, "");
 
-const byNewest = (a: Article, b: Article) => b.date.getTime() - a.date.getTime();
-
 const byFileOrder = (a: Article, b: Article) => a.id.localeCompare(b.id, "en", { numeric: true });
+
+const byNewest = (a: Article, b: Article) => b.date.getTime() - a.date.getTime() || byFileOrder(a, b);
 
 const latestDate = (series: Series) => Math.max(...series.articles.map((article) => article.date.getTime()));
 

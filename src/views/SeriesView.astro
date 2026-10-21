@@ -1,0 +1,44 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import type { Series } from "../lib/library";
+import { pluralize } from "../lib/format";
+
+type Props = {
+  series: Series;
+};
+
+const { series } = Astro.props;
+---
+
+<BaseLayout title={series.title} description={series.description}>
+  <SiteHeader variant="page" />
+  <section aria-labelledby="series-title" class="mt-12 flex flex-col gap-5 text-lg leading-[1.68] sm:mt-20 sm:gap-6 sm:text-xl sm:leading-[1.7]">
+    <header class="mb-2 flex flex-col gap-3 sm:mb-4 sm:gap-4">
+      <span class="text-sm text-fg-3 sm:text-[15px]">
+        Series · {pluralize(series.articles.length, "part")} · <a href={series.topic.url} class="underline-subtle">{series.topic.title}</a>
+      </span>
+      <h1 id="series-title" class="text-[32px] leading-[1.15] font-bold tracking-[-0.02em] text-balance sm:text-[44px] sm:leading-[1.12]">
+        {series.title}
+      </h1>
+      <p class="text-[19px] leading-normal text-fg-2 sm:text-[22px] sm:leading-[1.55]">{series.description}</p>
+    </header>
+    <ol class="border-t border-line leading-normal">
+      {
+        series.articles.map((article) => (
+          <li class="border-b border-line sm:border-0">
+            <a href={article.url} class="group flex flex-col gap-1.5 py-[18px] sm:grid sm:grid-cols-[76px_minmax(0,1fr)] sm:items-baseline sm:gap-4 sm:py-3">
+              <span class="text-sm text-fg-3 sm:text-[15px]">Part {article.part}</span>
+              <span class="flex flex-col gap-1.5 sm:gap-1">
+                <span class="text-xl leading-[1.3] font-semibold group-hover:underline-subtle sm:leading-[1.35]">{article.title}</span>
+                <span class="text-base text-fg-2">{article.description}</span>
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+  <SiteFooter variant="page" />
+</BaseLayout>

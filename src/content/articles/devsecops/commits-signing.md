@@ -1,3 +1,9 @@
+---
+title: "Why you should sign your Git commits"
+description: "Anyone can commit under your name. GPG signatures make authorship verifiable, on GitHub and in CI."
+date: 2025-06-25
+---
+
 ## Why Sign Your Git Commits?
 
 Git allows anyone to set any name and email on a commit. This makes it trivial for an attacker to **impersonate another contributor** in the Git history.
@@ -14,13 +20,13 @@ git commit -m "Improve performance"
 
 And here’s how it looks in the commit history:
 
-![Impersonation example](/static/commits-signing/impersonated-commit.png)
+![Impersonation example](./images/impersonated-commit.png)
 
 > As you can see, GitHub displays Torvalds's avatar and name, even though he never made this commit. Although you can see that `torvalds` is the author but `Julestblt` is the committer, this is not enough to verify authenticity.
 
 As my github account is linked to my SSH key, it will recognize me as the committer, but in the repository, it will only show the author as Linus Torvalds, which can be misleading.
 
-![Git log history](/static/commits-signing/git-log-history.png)
+![Git log history](./images/git-log-history.png)
 
 ---
 
@@ -87,7 +93,7 @@ Add the public key to GitHub at:
 
 At the end, you should have the GPG key added to your GitHub account :
 
-![GPG key added to GitHub](/static/commits-signing/gpg-github.png)
+![GPG key added to GitHub](./images/gpg-github.png)
 
 ### Configure Git to sign commits:
 
@@ -105,7 +111,7 @@ git commit -S -m "My secure commit"
 
 > If configured correctly, GitHub will show a `Verified` badge ✅
 
-![Verified commit](/static/commits-signing/verified-commit.webp)
+![Verified commit](./images/verified-commit.webp)
 
 ---
 

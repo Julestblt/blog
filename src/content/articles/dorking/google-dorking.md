@@ -1,4 +1,8 @@
-# Google Dorking Guide
+---
+title: "Google dorking guide"
+description: "Search operators that surface exposed files and pages, and how to keep your own site out of the results."
+date: 2025-06-25
+---
 
 ## ⚠️ Legal Notice
 

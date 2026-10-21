@@ -1,4 +1,8 @@
-# Turning my homelab into an AI development environment
+---
+title: "Turning my homelab into an AI development environment"
+description: "Codex, Hermes and a shared workspace, with one gateway for agent access and metrics."
+date: 2026-09-20
+---
 
 My homelab started as a place to deploy applications. It gradually became something more interesting: a development environment where AI agents can work on real repositories, run tools and ship changes through the same Git workflow I use manually.
 

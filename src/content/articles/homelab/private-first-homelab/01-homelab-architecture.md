@@ -1,7 +1,7 @@
-# Building a private-first homelab for apps and AI agents
-
-> **TL;DR** — My homelab is a small Debian server that runs my applications, deployment platform and AI development tooling. Public applications enter through Cloudflare Tunnel, administration stays behind Tailscale, Dokploy manages deployments, and a separate agent layer gives Codex and Hermes controlled access to shared projects.
-
+---
+title: "Building a private-first homelab for apps and AI agents"
+description: "A small Debian server behind Cloudflare Tunnel and Tailscale, deployed with Dokploy and shared with AI agents."
+date: 2026-09-20
 ---
 
 ## Why I built it
@@ -25,7 +25,7 @@ The interesting part ended up being less Docker itself and more the boundaries b
 
 The diagram below is the current mental model of the platform. It deliberately leaves out secrets, private addresses and low-level identifiers: what matters here is how the components interact.
 
-![Homelab architecture: AI development, observability and delivery platform](/static/homelab/agentic-development-platform-v2.png)
+![Homelab architecture: AI development, observability and delivery platform](./images/agentic-development-platform-v2.png)
 
 There are three major zones in the diagram:
 

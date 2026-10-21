@@ -1,4 +1,8 @@
-# Public apps, private control plane: networking a Dokploy homelab
+---
+title: "Public apps, private control plane: networking a Dokploy homelab"
+description: "Cloudflare Tunnel for public applications, Tailscale for administration, and the 502s in between."
+date: 2026-09-20
+---
 
 Running an application at home is easy until it has to be reachable from the Internet.
 

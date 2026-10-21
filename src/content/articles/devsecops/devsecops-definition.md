@@ -1,7 +1,7 @@
-# What is DevSecOps ?
-
-> **TL;DR** – DevSecOps integrates security _from the first line of code_ through production operations, using collaboration and automation to make security everyone’s job and deliver software both **fast** _and_ **safe**.
-
+---
+title: "What is DevSecOps?"
+description: "Security from the first line of code to production, made everyone’s job through collaboration and automation."
+date: 2025-07-21
 ---
 
 ## 1. Why DevSecOps Matters
@@ -53,7 +53,7 @@ Key attributes:
 
 ## 4. Security Activities Across the SDLC
 
-![Security Activities Across the SDLC](/static/devsecops-definition/devsecops-activities.png)
+![Security Activities Across the SDLC](./images/devsecops-activities.png)
 
 ---
 

@@ -1,0 +1,31 @@
+---
+import type { MarkdownHeading } from "astro";
+
+type Props = {
+  headings: MarkdownHeading[];
+};
+
+const MIN_SECTIONS = 2;
+const sections = Astro.props.headings.filter((heading) => heading.depth === 2);
+---
+
+{
+  sections.length >= MIN_SECTIONS && (
+    <details id="contents" open class="border-y border-line py-1 text-base sm:py-4 sm:text-[17px]">
+      <summary class="cursor-pointer py-2.5 font-semibold sm:py-0">Contents</summary>
+      <ol class="mt-1 mb-3 flex list-decimal flex-col gap-2 pl-[22px] leading-[1.45] sm:mt-3 sm:mb-0 sm:gap-1.5 sm:leading-normal">
+        {sections.map((heading) => (
+          <li>
+            <a href={`#${heading.slug}`} class="hover:underline-subtle">
+              {heading.text}
+            </a>
+          </li>
+        ))}
+      </ol>
+    </details>
+  )
+}
+
+<script is:inline>
+  if (matchMedia("(width < 40rem)").matches) document.getElementById("contents")?.removeAttribute("open");
+</script>

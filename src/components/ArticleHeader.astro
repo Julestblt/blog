@@ -1,0 +1,45 @@
+---
+import type { Article } from "../lib/library";
+import { formatFullDate, formatIsoDate, readingMinutes } from "../lib/format";
+import { absoluteUrl } from "../lib/site";
+
+type Props = {
+  article: Article;
+};
+
+const { article } = Astro.props;
+const { series, part } = article;
+const minutes = readingMinutes(article.entry.body ?? "");
+const aiPrompt = `Read ${absoluteUrl(article.markdownUrl)} so I can ask you questions about it.`;
+const aiUrl = `https://claude.ai/new?q=${encodeURIComponent(aiPrompt)}`;
+const toolClass = "inline-flex min-h-10 items-center text-fg-3 underline-subtle hover:text-fg sm:inline sm:min-h-0";
+---
+
+<header class="mb-2 flex flex-col gap-3 sm:mb-4 sm:gap-4">
+  <span class="text-sm text-fg-3 sm:text-[15px]">
+    <time datetime={formatIsoDate(article.date)}>{formatFullDate(article.date)}</time> · {minutes} min
+    {
+      series && (
+        <span class="hidden sm:inline">
+          · <a href={series.url} class="underline-subtle">{series.title}, part {part}</a>
+        </span>
+      )
+    }
+  </span>
+  <h1 class="text-[32px] leading-[1.15] font-bold tracking-[-0.02em] text-balance sm:text-[44px] sm:leading-[1.12]">
+    {article.title}
+  </h1>
+  <p class="text-[19px] leading-normal text-fg-2 sm:text-[22px] sm:leading-[1.55]">{article.description}</p>
+  {
+    series && (
+      <span class="text-sm text-fg-3 sm:hidden">
+        Part {part} of <a href={series.url} class="underline-subtle">{series.title}</a>
+      </span>
+    )
+  }
+  <div class="flex flex-wrap gap-x-[18px] text-[15px] sm:gap-x-5 sm:gap-y-1.5 sm:pt-1">
+    <a href={article.markdownUrl} class={toolClass}><span class="hidden sm:inline">View as&nbsp;</span>Markdown</a>
+    <button type="button" data-copy-link class={`border-0 bg-transparent p-0 ${toolClass}`}>Copy link</button>
+    <a href={aiUrl} target="_blank" rel="noopener" class={toolClass}><span class="sm:hidden">With AI</span><span class="hidden sm:inline">Use with AI</span></a>
+  </div>
+</header>

@@ -1,7 +1,8 @@
 ---
 import TopicFilter from "./TopicFilter.astro";
+import ListRow from "./ListRow.astro";
+import ArticleDate from "./ArticleDate.astro";
 import { groupByYear, type Article, type Topic } from "../lib/library";
-import { formatDayMonth, formatDayMonthYear, formatIsoDate } from "../lib/format";
 
 type Props = {
   articles: Article[];
@@ -24,18 +25,11 @@ const years = groupByYear(articles);
         <h3 class="mb-1.5 hidden text-[15px] font-normal text-fg-3 sm:block">{year}</h3>
         <ol>
           {yearArticles.map((article) => (
-            <li class="border-b border-line sm:border-0">
-              <a href={article.url} class="group flex flex-col gap-1.5 py-[18px] sm:grid sm:grid-cols-[76px_minmax(0,1fr)] sm:items-baseline sm:gap-4 sm:py-3">
-                <time datetime={formatIsoDate(article.date)} class="text-[14px] text-fg-3 tabular-nums sm:text-[15px]">
-                  <span class="sm:hidden">{formatDayMonthYear(article.date)}</span>
-                  <span class="hidden sm:inline">{formatDayMonth(article.date)}</span>
-                </time>
-                <span class="flex flex-col gap-1.5 sm:gap-1">
-                  <span class="text-[20px] leading-[1.3] font-semibold group-hover:underline-subtle sm:leading-[1.35]">{article.title}</span>
-                  <span class="text-[16px] leading-normal text-fg-2">{article.description}</span>
-                </span>
-              </a>
-            </li>
+            <ListRow href={article.url}>
+              <ArticleDate slot="label" date={article.date} />
+              <Fragment slot="title">{article.title}</Fragment>
+              <Fragment slot="text">{article.description}</Fragment>
+            </ListRow>
           ))}
         </ol>
       </div>

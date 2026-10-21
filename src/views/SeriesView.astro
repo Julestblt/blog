@@ -2,6 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import SiteHeader from "../components/SiteHeader.astro";
 import SiteFooter from "../components/SiteFooter.astro";
+import ListRow from "../components/ListRow.astro";
 import type { Series } from "../lib/library";
 import { pluralize } from "../lib/format";
 
@@ -27,15 +28,11 @@ const { series } = Astro.props;
     <ol class="border-t border-line sm:leading-normal">
       {
         series.articles.map((article) => (
-          <li class="border-b border-line sm:border-0">
-            <a href={article.url} class="group flex flex-col gap-1.5 py-[18px] sm:grid sm:grid-cols-[76px_minmax(0,1fr)] sm:items-baseline sm:gap-4 sm:py-3">
-              <span class="text-[14px] text-fg-3 sm:text-[15px]">Part {article.part}</span>
-              <span class="flex flex-col gap-1.5 sm:gap-1">
-                <span class="text-[20px] leading-[1.3] font-semibold group-hover:underline-subtle sm:leading-[1.35]">{article.title}</span>
-                <span class="text-[16px] text-fg-2">{article.description}</span>
-              </span>
-            </a>
-          </li>
+          <ListRow href={article.url}>
+            <span slot="label" class="text-[14px] text-fg-3 sm:text-[15px]">Part {article.part}</span>
+            <Fragment slot="title">{article.title}</Fragment>
+            <Fragment slot="text">{article.description}</Fragment>
+          </ListRow>
         ))
       }
     </ol>

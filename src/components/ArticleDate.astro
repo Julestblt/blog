@@ -1,0 +1,14 @@
+---
+import { formatDayMonth, formatDayMonthYear, formatIsoDate } from "../lib/format";
+
+type Props = {
+  date?: Date;
+};
+
+const { date } = Astro.props;
+---
+
+<time datetime={date && formatIsoDate(date)} class="text-[14px] text-fg-3 tabular-nums sm:text-[15px]">
+  <span data-date-long class="sm:hidden">{date && formatDayMonthYear(date)}</span>
+  <span data-date-short class="hidden sm:inline">{date && formatDayMonth(date)}</span>
+</time>

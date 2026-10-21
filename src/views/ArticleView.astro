@@ -1,0 +1,42 @@
+---
+import { render } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import ArticleHeader from "../components/ArticleHeader.astro";
+import TableOfContents from "../components/TableOfContents.astro";
+import MarginContents from "../components/MarginContents.astro";
+import SeriesNavigation from "../components/SeriesNavigation.astro";
+import type { Article } from "../lib/library";
+import { formatIsoDate } from "../lib/format";
+
+type Props = {
+  article: Article;
+};
+
+const { article } = Astro.props;
+const { Content, headings } = await render(article.entry);
+const MIN_SECTIONS = 2;
+const sections = headings.filter((heading) => heading.depth === 2);
+const hasContents = sections.length >= MIN_SECTIONS;
+---
+
+<BaseLayout title={article.title} description={article.description} type="article" markdownUrl={article.markdownUrl} publishedAt={article.date}>
+  <SiteHeader variant="page" />
+  <div class="relative mt-12 sm:mt-20">
+    {hasContents && <MarginContents sections={sections} />}
+    <article data-pagefind-body data-pagefind-meta={`date:${formatIsoDate(article.date)}`} class="flex flex-col gap-5 text-[18px] leading-[1.68] sm:gap-6 sm:text-[20px] sm:leading-[1.7]">
+      <ArticleHeader article={article} />
+      {hasContents && <TableOfContents sections={sections} />}
+      <div class="prose">
+        <Content />
+      </div>
+    </article>
+  </div>
+  <SeriesNavigation article={article} />
+  <SiteFooter variant="page" />
+</BaseLayout>
+
+<script>
+  import "../scripts/copy-buttons";
+</script>

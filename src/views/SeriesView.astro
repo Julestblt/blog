@@ -1,0 +1,41 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import ListRow from "../components/ListRow.astro";
+import type { Series } from "../lib/library";
+import { pluralize } from "../lib/format";
+
+type Props = {
+  series: Series;
+};
+
+const { series } = Astro.props;
+---
+
+<BaseLayout title={series.title} description={series.description}>
+  <SiteHeader variant="page" />
+  <section aria-labelledby="series-title" class="mt-12 flex flex-col gap-5 text-[18px] leading-[1.68] sm:mt-20 sm:gap-6 sm:text-[20px] sm:leading-[1.7]">
+    <header class="mb-2 flex flex-col gap-3 sm:mb-4 sm:gap-4">
+      <span class="text-[14px] text-fg-3 sm:text-[15px]">
+        Series · {pluralize(series.articles.length, "part")} · <a href={series.topic.url} class="underline-subtle">{series.topic.title}</a>
+      </span>
+      <h1 id="series-title" class="text-[32px] leading-[1.15] font-bold tracking-[-0.02em] text-balance sm:text-[44px] sm:leading-[1.12]">
+        {series.title}
+      </h1>
+      <p class="text-[19px] leading-normal text-fg-2 sm:text-[22px] sm:leading-[1.55]">{series.description}</p>
+    </header>
+    <ol class="border-t border-line sm:leading-normal">
+      {
+        series.articles.map((article) => (
+          <ListRow href={article.url}>
+            <span slot="label" class="text-[14px] text-fg-3 sm:text-[15px]">Part {article.part}</span>
+            <Fragment slot="title">{article.title}</Fragment>
+            <Fragment slot="text">{article.description}</Fragment>
+          </ListRow>
+        ))
+      }
+    </ol>
+  </section>
+  <SiteFooter variant="page" />
+</BaseLayout>

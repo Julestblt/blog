@@ -1,0 +1,38 @@
+---
+import TopicFilter from "./TopicFilter.astro";
+import ListRow from "./ListRow.astro";
+import ArticleDate from "./ArticleDate.astro";
+import { groupByYear, type Article, type Topic } from "../lib/library";
+
+type Props = {
+  articles: Article[];
+  topics: Topic[];
+  activeTopic?: Topic;
+};
+
+const { articles, topics, activeTopic } = Astro.props;
+const years = groupByYear(articles);
+---
+
+<section id="articles" aria-labelledby="articles-heading" class="mt-10 sm:mt-[72px]">
+  <div class="flex flex-col gap-2.5 border-b border-line pb-3 sm:flex-row sm:flex-wrap sm:items-baseline sm:justify-between sm:gap-x-4 sm:gap-y-2 sm:pb-3.5">
+    <h2 id="articles-heading" class="text-[15px] font-semibold tracking-[.02em]">Articles</h2>
+    <TopicFilter topics={topics} active={activeTopic} />
+  </div>
+  {
+    years.map(({ year, articles: yearArticles }) => (
+      <div class="sm:pt-7">
+        <h3 class="mb-1.5 hidden text-[15px] font-normal text-fg-3 sm:block">{year}</h3>
+        <ol>
+          {yearArticles.map((article) => (
+            <ListRow href={article.url}>
+              <ArticleDate slot="label" date={article.date} />
+              <Fragment slot="title">{article.title}</Fragment>
+              <Fragment slot="text">{article.description}</Fragment>
+            </ListRow>
+          ))}
+        </ol>
+      </div>
+    ))
+  }
+</section>

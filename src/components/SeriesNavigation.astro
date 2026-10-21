@@ -1,0 +1,33 @@
+---
+import type { Article } from "../lib/library";
+
+type Props = {
+  article: Article;
+};
+
+const { article } = Astro.props;
+const siblings = article.series?.articles ?? [];
+const index = siblings.indexOf(article);
+const previous = siblings[index - 1];
+const next = siblings[index + 1];
+const linkClass = "flex flex-col gap-1 border-t border-line py-4 hover:underline-subtle sm:border-0 sm:py-0";
+---
+
+{
+  (previous || next) && (
+    <nav aria-label="Series" class="mt-12 flex flex-col border-b border-line text-[17px] sm:mt-16 sm:flex-row sm:justify-between sm:gap-6 sm:border-t sm:border-b-0 sm:pt-[18px]">
+      {next && (
+        <a href={next.url} class={`${linkClass} sm:order-last sm:ml-auto sm:text-right`}>
+          <span class="text-[14px] text-fg-3">Next →</span>
+          {next.title}
+        </a>
+      )}
+      {previous && (
+        <a href={previous.url} class={linkClass}>
+          <span class="text-[14px] text-fg-3">← Previous</span>
+          {previous.title}
+        </a>
+      )}
+    </nav>
+  )
+}

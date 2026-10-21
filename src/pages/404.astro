@@ -1,0 +1,16 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SiteHeader from "../components/SiteHeader.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+---
+
+<BaseLayout title="Page not found" description="This page does not exist or has moved.">
+  <SiteHeader variant="page" />
+  <section aria-labelledby="missing-title" class="mt-12 flex flex-col gap-3 text-[18px] leading-[1.68] sm:mt-20 sm:gap-4 sm:text-[20px] sm:leading-[1.7]">
+    <span class="text-[14px] text-fg-3 sm:text-[15px]">404</span>
+    <h1 id="missing-title" class="text-[32px] leading-[1.15] font-bold tracking-[-0.02em] sm:text-[44px] sm:leading-[1.12]">Page not found</h1>
+    <p class="text-[19px] leading-normal text-fg-2 sm:text-[22px] sm:leading-[1.55]">This page does not exist or has moved.</p>
+    <p class="mt-2"><a href="/" class="underline-subtle">Browse all articles</a></p>
+  </section>
+  <SiteFooter variant="page" />
+</BaseLayout>

@@ -1,0 +1,28 @@
+---
+import type { Topic } from "../lib/library";
+
+type Props = {
+  topics: Topic[];
+  active?: Topic;
+};
+
+const { topics, active } = Astro.props;
+const options = [{ label: "All", url: "/", isActive: !active }, ...topics.map((topic) => ({ label: topic.title, url: topic.url, isActive: topic === active }))];
+---
+
+<nav aria-label="Filter by topic" class="flex flex-wrap gap-x-4 text-[15px] sm:gap-x-3.5 sm:gap-y-1">
+  {
+    options.map((option) => (
+      <a
+        href={option.url}
+        aria-current={option.isActive ? "page" : undefined}
+        class:list={[
+          "inline-flex min-h-9 items-center sm:inline sm:min-h-0",
+          option.isActive ? "text-fg underline-subtle" : "text-fg-3 hover:text-fg",
+        ]}
+      >
+        {option.label}
+      </a>
+    ))
+  }
+</nav>

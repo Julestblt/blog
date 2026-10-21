@@ -1,0 +1,23 @@
+---
+import { SITE } from "../lib/site";
+
+type Props = {
+  variant: "index" | "page";
+};
+
+const { variant } = Astro.props;
+const year = new Date().getFullYear();
+const linkClass = variant === "index" ? "underline-subtle sm:no-underline sm:hover:underline-subtle" : "underline-subtle";
+---
+
+<footer
+  class:list={[
+    "flex flex-wrap justify-between gap-x-6 gap-y-2 text-[14px] text-fg-3 sm:border-t sm:border-line sm:pt-[18px]",
+    variant === "index" ? "mt-14 sm:mt-24" : "mt-12 sm:mt-[72px]",
+  ]}
+>
+  <span>
+    © {year} {SITE.author}{" · "}<a href="/rss.xml" class={linkClass}>RSS</a>
+    <span class="hidden sm:inline">{" · "}<a href="/llms.txt" class={linkClass}>llms.txt</a></span>
+  </span>
+</footer>

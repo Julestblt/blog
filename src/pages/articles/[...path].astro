@@ -1,0 +1,28 @@
+---
+import type { GetStaticPaths } from "astro";
+import IndexView from "../../views/IndexView.astro";
+import SeriesView from "../../views/SeriesView.astro";
+import ArticleView from "../../views/ArticleView.astro";
+import { getLibrary, type Article, type Library, type Series, type Topic } from "../../lib/library";
+
+type Props =
+  | { kind: "topic"; topic: Topic; library: Library }
+  | { kind: "series"; series: Series }
+  | { kind: "article"; article: Article };
+
+export const getStaticPaths = (async () => {
+  const library = await getLibrary();
+  const pathOf = (url: string) => url.replace(/^\/articles\//, "");
+  return [
+    ...library.topics.map((topic) => ({ params: { path: pathOf(topic.url) }, props: { kind: "topic" as const, topic, library } })),
+    ...library.series.map((series) => ({ params: { path: pathOf(series.url) }, props: { kind: "series" as const, series } })),
+    ...library.articles.map((article) => ({ params: { path: pathOf(article.url) }, props: { kind: "article" as const, article } })),
+  ];
+}) satisfies GetStaticPaths;
+
+const props = Astro.props;
+---
+
+{props.kind === "topic" && <IndexView library={props.library} activeTopic={props.topic} />}
+{props.kind === "series" && <SeriesView series={props.series} />}
+{props.kind === "article" && <ArticleView article={props.article} />}

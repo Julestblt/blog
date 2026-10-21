@@ -40,7 +40,7 @@ export const copyableCodeBlocks = defineHastPlugin({
     filter: ["pre"],
     visit(node, ctx) {
       ctx.wrapNode(node, {
-        raw: '<div class="code-block"><button type="button" class="code-copy" data-copy-code>Copy</button></div>',
+        raw: '<div class="code-block"><button type="button" class="code-copy" data-copy-code data-pagefind-ignore>Copy</button></div>',
       });
     },
   },

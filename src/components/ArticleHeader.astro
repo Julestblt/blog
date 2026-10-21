@@ -17,7 +17,7 @@ const toolClass = "inline-flex min-h-10 items-center text-fg-3 underline-subtle 
 
 <header class="mb-2 flex flex-col gap-3 sm:mb-4 sm:gap-4">
   <span class="text-[14px] text-fg-3 sm:text-[15px]">
-    <time datetime={formatIsoDate(article.date)}>{formatFullDate(article.date)}</time> · {minutes} min
+    <time datetime={formatIsoDate(article.date)} data-pagefind-meta={`date:${formatIsoDate(article.date)}`}>{formatFullDate(article.date)}</time> · {minutes} min
     {
       series && (
         <span class="hidden sm:inline">
@@ -37,7 +37,7 @@ const toolClass = "inline-flex min-h-10 items-center text-fg-3 underline-subtle 
       </span>
     )
   }
-  <div class="flex flex-wrap gap-x-[18px] text-[15px] sm:gap-x-5 sm:gap-y-1.5 sm:pt-1">
+  <div data-pagefind-ignore class="flex flex-wrap gap-x-[18px] text-[15px] sm:gap-x-5 sm:gap-y-1.5 sm:pt-1">
     <a href={article.markdownUrl} class={toolClass}><span class="hidden sm:inline">View as&nbsp;</span>Markdown</a>
     <button type="button" data-copy-link class={`border-0 bg-transparent p-0 ${toolClass}`}>Copy link</button>
     <a href={aiUrl} target="_blank" rel="noopener" class={toolClass}><span class="sm:hidden">With AI</span><span class="hidden sm:inline">Use with AI</span></a>

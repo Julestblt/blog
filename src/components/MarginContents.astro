@@ -1,0 +1,30 @@
+---
+import type { MarkdownHeading } from "astro";
+
+type Props = {
+  sections: MarkdownHeading[];
+};
+
+const { sections } = Astro.props;
+---
+
+<aside aria-label="Contents" data-pagefind-ignore class="absolute top-0 right-full mr-14 hidden h-full w-[220px] xl:block">
+  <nav data-margin-contents class="sticky top-[72px] flex flex-col gap-3.5 text-[15px] leading-[1.45]">
+    <span class="font-semibold tracking-[.02em]">Contents</span>
+    <ol class="flex flex-col gap-2.5">
+      {
+        sections.map((heading) => (
+          <li>
+            <a href={`#${heading.slug}`} class="text-fg-3 hover:text-fg aria-[current=location]:text-fg">
+              {heading.text}
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+  </nav>
+</aside>
+
+<script>
+  import "../scripts/current-section";
+</script>
